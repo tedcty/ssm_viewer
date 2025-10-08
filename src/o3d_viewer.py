@@ -1,6 +1,7 @@
 import sys
 import os
 from typing import Optional
+from ptb.util.io.opendialog import OpenFiles
 
 import time
 
@@ -85,6 +86,16 @@ class CustomConfig:
     def help(self):
         print("Help")
 
+class SSMConfig(CustomConfig):
+    def __init__(self, parent_widget=None, viewer=None, main=None):
+        super().__init__(parent_widget, viewer)
+
+    def load(self, in_file=None):
+        op = OpenFiles()
+        self.current_file = in_file
+        if in_file is None or not in_file:
+            self.current_file = op.get_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
+
 
 class Articulate(CustomConfig):
     def __init__(self, viewer=None):
@@ -106,7 +117,7 @@ class MainMenuBar(QMenuBar):
 
     def __init__(self, parent=None, view=None, default_menus=True, splash=None):
         super().__init__(parent)
-        self.config_me = CustomConfig(view)
+        self.config_me = SSMConfig(view)
         self.par: Optional[MainWidget, None] = parent
         self.view = view
         self.save_action = None

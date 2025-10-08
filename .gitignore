@@ -7,3 +7,6 @@
 src/defaults/__pycache__/__init__.cpython-312.pyc
 src/defaults/__pycache__/viewer.cpython-312.pyc
 src/scripts/resources/wheels/ptb/latest.txt
+src/__pycache__/__init__.cpython-312.pyc
+src/defaults/__pycache__/tools.cpython-312.pyc
+src/defaults/__pycache__/widgets.cpython-312.pyc

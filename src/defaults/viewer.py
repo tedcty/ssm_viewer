@@ -852,7 +852,7 @@ class WorldView(QWidget):
 
 
     def on_close(self):
-        self.expanded_button.close()
+        print("on closed")
         pass
 
     def clear_view(self):
@@ -889,15 +889,15 @@ class WorldView(QWidget):
         print("on_focus")
         self.closed = False
         self.menu_boo = False
-        self.button.setChecked(False)
-        self.button.setCheckable(True)
-        self.button.update()
-        self.button2.setChecked(False)
-        self.button2.setCheckable(True)
-        self.button2.update()
-        self.button3.setChecked(False)
-        self.button3.setCheckable(True)
-        self.button3.update()
+        # self.button.setChecked(False)
+        # self.button.setCheckable(True)
+        # self.button.update()
+        # self.button2.setChecked(False)
+        # self.button2.setCheckable(True)
+        # self.button2.update()
+        # self.button3.setChecked(False)
+        # self.button3.setCheckable(True)
+        # self.button3.update()
 
     def menu_trigger(self):
         if self.closed:
@@ -1203,7 +1203,7 @@ class HoverLabel(QWidget):
         )
 
         sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
-        w = int(sizing.width()+k.width()/2)
+        w = int(sizing.width()+k.width()/2.0)
         h = int(sizing.height()+k.height())
 
         self.setFixedWidth(w)
@@ -1212,7 +1212,7 @@ class HoverLabel(QWidget):
         self.vl = QVBoxLayout()
         self.vl.addWidget(self.labe)
         self.setLayout(self.vl)
-        self.button_loc4 = QPoint(int((self.listener.app_win.width / 2)-w/2), 0)
+        self.button_loc4 = QPoint(int((self.listener.app_win.width / 2.0)-w/2.0 - 0.1*w), 0)
         self.move(self.button_loc4)
         self.setMask(self.make_mask())
         self.setVisible(True)
@@ -1220,7 +1220,7 @@ class HoverLabel(QWidget):
     def update_pos(self, app_k):
         sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
         k = self.size()
-        w = int(np.round((sizing.width() + k.width() / 2.0), 0))
+        w = int(np.round((sizing.width() + k.width() / 2.0 + 0.15*k.width()), 0))
         h = int(sizing.height() + k.height())
 
         # self.setFixedWidth(w)
