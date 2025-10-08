@@ -172,7 +172,7 @@ class O3dHelperApp(QMainWindow):
     def __init__(self, screen, splash=None):
         super().__init__()
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.title = 'O3dHelper'
+        self.title = 'SSM Viewer'
         self.splash = splash
         size: QSize = screen.size()
         self.width = int(0.8 * size.width())
