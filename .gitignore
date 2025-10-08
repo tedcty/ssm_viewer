@@ -1,0 +1,8 @@
+.idea/.gitignore
+.idea/misc.xml
+.idea/modules.xml
+.idea/ssm_viewer.iml
+.idea/vcs.xml
+.idea/inspectionProfiles/profiles_settings.xml
+src/defaults/__pycache__/__init__.cpython-312.pyc
+src/defaults/__pycache__/viewer.cpython-312.pyc
