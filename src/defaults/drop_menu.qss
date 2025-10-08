@@ -1,0 +1,77 @@
+QLabel {
+    background-color: rgba(64, 64, 64, 0);
+    font: bold 18px;
+    color: "#dbdbd9";
+}
+QWidget{
+    background-color: rgba(255, 255, 255, 0);
+    border: 0px;
+    padding: 0px;
+}
+
+#mesh_q {
+    background-color: rgba(64, 64, 64, 0);
+    border: 0px;
+    font: bold 12px;
+    color: "#dbdbd9";
+    padding: 0px;
+}
+
+#mesh_q2 {
+    background-color: rgba(64, 64, 64, 0);
+    font: bold 12px;
+    color: rgba(200, 200, 200, 0);
+    padding: 0px;
+    border: 0px;
+}
+
+QPushButton {
+    background-color: "#3B3838"; /* sets background of the menu */
+    border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    border-color: "#3B3838";
+    color: "#dbdbd9";
+    padding: 5px;
+    border-radius: 8px;
+    min-height: 0.86em;
+    font: bold 16px;
+}
+
+
+QPushButton:hover { /* when user selects item using mouse or keyboard */
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+QPushButton:checked { /* when user selects item using mouse or keyboard */
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+#world_pop{
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#text_box {
+    background: #616161;
+    color: "#fffaeb";
+    border-top-left-radius: 5;
+    border-top-right-radius: 5;
+    border-bottom-left-radius: 5;
+    border-bottom-right-radius: 5;
+    font: bold 14px;
+    padding-left: 5px;
+}
+
+#check_box {
+    border: 3px white;
+    background: #616161;
+    padding-right: -6px;
+    border-top-left-radius: 5;
+    border-top-right-radius: 5;
+    border-bottom-left-radius: 5;
+    border-bottom-right-radius: 5;
+}

@@ -1,0 +1,47 @@
+QMainWindow {
+    background-color: "#3d3d3b"; /* sets background of the menu */
+    color: "#dbdbd9";
+}
+
+QWidget{
+    background-color: #3d3d3b;
+    border: 0px;
+    padding: 0px;
+}
+
+#world_qw{
+    background-color: #3d3d3b;
+    border: 0px;
+    padding: 0px;
+}
+
+QLabel {
+    background-color: #3d3d3b;
+    font: bold 18px;
+    color: "#dbdbd9";
+}
+
+QPushButton {
+    background-color: "#3B3838"; /* sets background of the menu */
+    border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    border-color: "#3B3838";
+    color: "#dbdbd9";
+    padding: 2px;
+    border-radius: 10px;
+    min-width: 2em;
+    min-height: 0.86em;
+    font: bold 12px;
+}
+
+
+QPushButton:hover { /* when user selects item using mouse or keyboard */
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+QPushButton:checked { /* when user selects item using mouse or keyboard */
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
