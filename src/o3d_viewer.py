@@ -5,10 +5,8 @@ from typing import Optional
 import time
 
 from threading import Thread
-from defaults.viewer import WorldView
-
-from ptb.util.io.helper import BasicIO
-from ptb.util.io.opendialog import OpenFiles
+from src.defaults.viewer import WorldView
+from src.defaults.tools import BasicIO
 
 from PySide6.QtWidgets import (QMainWindow, QApplication, QMenuBar, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox)
 from PySide6.QtGui import QIcon, QColor
@@ -20,9 +18,8 @@ class MainWidget(QWidget):
         super().__init__(parent)
         self.par = parent
         self.layout = QVBoxLayout()
-        self.config = PCASSM()
-        self.menu_bar = MainMenuBar(parent=self, custom_view=self.config)
-
+        self.menu_bar = MainMenuBar(parent=self)
+        self.config = CustomConfig(self)
         # self.menu_bar.add_open_action(self.config.load)
         self.setStyleSheet(self.menu_bar.sty)
         self.layout.setMenuBar(self.menu_bar)
@@ -97,29 +94,6 @@ class Articulate(CustomConfig):
 class PCASSM(CustomConfig):
     def __init__(self, viewer=None):
         super().__init__(viewer)
-        print(PCASSM)
-
-    def load(self):
-        print("Open")
-        op = OpenFiles(title="Open Gias3 Shape Model Directory")
-        c = op.get_dir()
-        print(c)
-        if c is not None:
-            self.new_project()
-            print("Note Shape model mesh must end with {*}mesh.ply")
-            mean_mesh = [f for f in os.listdir(c) if f.endswith('mean.ply')]
-            pcs = [f for f in os.listdir(c) if f.endswith('.pc.npz')]
-            print(mean_mesh[0])
-            self.world_viewer.add_mesh("{0}/{1}".format(c, mean_mesh[0]))
-
-        pass
-
-    def new_project(self):
-        print("New")
-        self.world_viewer.clear_view()
-        self.world_viewer.add_global_axis()
-        self.world_viewer.reset_view()
-        pass
 
 
 class MainMenuBar(QMenuBar):
@@ -130,11 +104,9 @@ class MainMenuBar(QMenuBar):
         print("MainMenuBar")
         self.par.par.qw.on_focus()
 
-    def __init__(self, parent=None, view=None, default_menus=True, splash=None, custom_view=None):
+    def __init__(self, parent=None, view=None, default_menus=True, splash=None):
         super().__init__(parent)
-        self.config_me = custom_view
-        if self.config_me is None:
-            self.config_me = CustomConfig(view)
+        self.config_me = CustomConfig(view)
         self.par: Optional[MainWidget, None] = parent
         self.view = view
         self.save_action = None
@@ -149,7 +121,6 @@ class MainMenuBar(QMenuBar):
 
     def set_view(self, view):
         self.view = view
-        self.config_me.world_viewer = self.view
 
     def add_save_action(self, save):
         self.save_action.triggered.connect(save)
@@ -201,7 +172,7 @@ class O3dHelperApp(QMainWindow):
     def __init__(self, screen, splash=None):
         super().__init__()
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.title = 'Shape Model Viewer'
+        self.title = 'SSM Viewer'
         self.splash = splash
         size: QSize = screen.size()
         self.width = int(0.8 * size.width())
