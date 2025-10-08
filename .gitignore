@@ -6,3 +6,4 @@
 .idea/inspectionProfiles/profiles_settings.xml
 src/defaults/__pycache__/__init__.cpython-312.pyc
 src/defaults/__pycache__/viewer.cpython-312.pyc
+src/scripts/resources/wheels/ptb/latest.txt
