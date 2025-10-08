@@ -1,0 +1,67 @@
+#top_scroll {
+    background-color: transparent;
+    border: 10px;
+    border-width: 10px;
+    color: #3B3838;
+    border-radius: 10px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+}
+
+#bottom_scroll {
+    background-color: #dbdbd9;
+    border: 2px;
+    border-width: 2px;
+    color: #3B3838;
+    border-color: transparent;
+    border-radius: 6px;
+}
+
+#label_options {
+    color: "#dbdbd9" ;
+    font: Bold 14px;
+    padding-left: 0px
+}
+
+QTextEdit {
+    background-color: transparent;
+    border: 2px transparent;
+    border-width: 2px transparent;
+    color: "#3B3838" ;
+    font: 14px;
+}
+
+QLineEdit{
+    background-color: "#dbdbd9";
+    border: 2px transparent;
+    border-width: 2px transparent;
+    color: "#3B3838" ;
+    font: 14px;
+    border-radius: 5px;
+    min-width: 1.5em;
+    min-height: 2em;
+}
+
+QTreeWidget {
+    background-color: transparent;
+    border: 2px transparent;
+    border-width: 2px transparent;
+    color: "#3B3838" ;
+    font: 14px;
+}
+
+QLabel {
+    color: #dbdbd9;
+    font: 14px;
+}
+
+QRadioButton{
+    background-color: "#30302f"; /* sets background of the menu */
+    border: 2px;
+    border-width: 2px;
+    border-color: "#30302f";
+    color: "#dbdbd9";
+    padding: 0px;
+    min-width: 6em;
+    font: bold 14px;
+}

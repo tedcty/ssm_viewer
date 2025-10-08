@@ -1,0 +1,40 @@
+#drop_button {
+    background-color: "#8a8987"; /* sets background of the menu #9c9b98  #3B3838*/
+    border: 0px;
+    border-width: 0px;
+    color: "#dbdbd9";
+    border-radius: 10px;
+}
+
+
+#drop_button:hover { /* when user selects item using mouse or keyboard */
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+#drop_button:checked { /* when user selects item using mouse or keyboard */
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+#ml_angle0{
+    background-color: rgba(64, 64, 64, 0);
+    font: bold 16px;
+    color: "#dbdbd9";
+}
+
+#model_name123{
+    background-color: "#3d3d3b"; /* sets background of the menu */
+    padding-top: -2px;
+    margin: 1px 10px 1px 10px;
+}
+
+#modelnamewidget{
+    background-color: "#3d3d3b"; /* sets background of the menu */
+    margin: 1px 10px 1px 10px;
+    color: "#dbdbd9";
+    border-width: 8;
+    border-style: Transparent;
+    border-color: "#3d3d3b";
+}
+
