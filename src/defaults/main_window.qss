@@ -45,3 +45,8 @@ QPushButton:checked { /* when user selects item using mouse or keyboard */
     background-color: "#dbdbd9";
     color: "#3B3838";
 }
+
+QLineEdit{
+    color: "#f5f3eb";
+    font: bold 16px;
+}

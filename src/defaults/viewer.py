@@ -899,51 +899,51 @@ class WorldView(QWidget):
         # self.button3.setCheckable(True)
         # self.button3.update()
 
-    def menu_trigger(self):
-        if self.closed:
-            print("menu tigger closed")
-            self.closed = False
-            self.button.setChecked(False)
-            return
-        print(self.button.mapToGlobal(self.button.pos()))
-        self.menu_boo = not self.menu_boo
-        self.button.setChecked(self.menu_boo)
-        p = self.button.mapToGlobal(self.button.pos())
-        self.expanded_button.move(p.x() + 18, p.y() - 30)
-        self.expanded_button.setVisible(self.menu_boo)
-        self.model_name_widget.setVisible(True)
-
-        print("pressed - trigger {0}".format(self.button.isChecked()))
-
-    def menu_trigger2(self):
-        if self.closed:
-            print("menu tigger closed")
-            self.closed = False
-            self.button2.setChecked(False)
-            return
-        print(self.button2.mapToGlobal(self.button2.pos()))
-        self.menu_boo = not self.menu_boo
-        self.button2.setChecked(self.menu_boo)
-        p = self.button.mapToGlobal(self.button.pos())
-        self.expanded_button1.move(p.x() + 18, p.y() - 30)
-        self.expanded_button1.setVisible(self.menu_boo)
-
-        print("pressed - trigger {0}".format(self.button2.isChecked()))
-
-    def menu_trigger3(self):
-        if self.closed:
-            print("menu tigger closed")
-            self.closed = False
-            self.button3.setChecked(False)
-            return
-        print(self.button.mapToGlobal(self.button.pos()))
-        self.menu_boo = not self.menu_boo
-        self.button3.setChecked(self.menu_boo)
-        p = self.button.mapToGlobal(self.button.pos())
-        self.expanded_button2.move(p.x() + 18, p.y() - 30)
-        self.expanded_button2.setVisible(self.menu_boo)
-
-        print("pressed - trigger {0}".format(self.button2.isChecked()))
+    # def menu_trigger(self):
+    #     if self.closed:
+    #         print("menu tigger closed")
+    #         self.closed = False
+    #         self.button.setChecked(False)
+    #         return
+    #     print(self.button.mapToGlobal(self.button.pos()))
+    #     self.menu_boo = not self.menu_boo
+    #     self.button.setChecked(self.menu_boo)
+    #     p = self.button.mapToGlobal(self.button.pos())
+    #     self.expanded_button.move(p.x() + 18, p.y() - 30)
+    #     self.expanded_button.setVisible(self.menu_boo)
+    #     self.model_name_widget.setVisible(True)
+    #
+    #     print("pressed - trigger {0}".format(self.button.isChecked()))
+    #
+    # def menu_trigger2(self):
+    #     if self.closed:
+    #         print("menu tigger closed")
+    #         self.closed = False
+    #         self.button2.setChecked(False)
+    #         return
+    #     print(self.button2.mapToGlobal(self.button2.pos()))
+    #     self.menu_boo = not self.menu_boo
+    #     self.button2.setChecked(self.menu_boo)
+    #     p = self.button.mapToGlobal(self.button.pos())
+    #     self.expanded_button1.move(p.x() + 18, p.y() - 30)
+    #     self.expanded_button1.setVisible(self.menu_boo)
+    #
+    #     print("pressed - trigger {0}".format(self.button2.isChecked()))
+    #
+    # def menu_trigger3(self):
+    #     if self.closed:
+    #         print("menu tigger closed")
+    #         self.closed = False
+    #         self.button3.setChecked(False)
+    #         return
+    #     print(self.button.mapToGlobal(self.button.pos()))
+    #     self.menu_boo = not self.menu_boo
+    #     self.button3.setChecked(self.menu_boo)
+    #     p = self.button.mapToGlobal(self.button.pos())
+    #     self.expanded_button2.move(p.x() + 18, p.y() - 30)
+    #     self.expanded_button2.setVisible(self.menu_boo)
+    #
+    #     print("pressed - trigger {0}".format(self.button2.isChecked()))
 
     @staticmethod
     def label_landmark(p_name, p):
@@ -1220,15 +1220,9 @@ class HoverLabel(QWidget):
     def update_pos(self, app_k):
         sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
         k = self.size()
-        w = int(np.round((sizing.width() + k.width() / 2.0 + 0.15*k.width()), 0))
+        w = int(np.round((sizing.width() + k.width() / 2.0 + 0.15*k.width() + 320), 0))
         h = int(sizing.height() + k.height())
 
-        # self.setFixedWidth(w)
-        # self.setFixedHeight(h)
-
-        # self.vl = QVBoxLayout()
-        # self.vl.addWidget(self.labe)
-        # self.setLayout(self.vl)
         print(app_k.width() / 2)
         w0 = np.round((app_k.width() / 2.0) - (w / 2.0), 0 ) + 20
         self.button_loc4 = QPoint(int(w0), 0)

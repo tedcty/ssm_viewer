@@ -7,7 +7,9 @@ import time
 
 from threading import Thread
 from src.defaults.viewer import WorldView
+from src.defaults.widgets import SSMInfoWidget
 from src.defaults.tools import BasicIO
+from src.util.dialogs import NewSSM
 
 from PySide6.QtWidgets import (QMainWindow, QApplication, QMenuBar, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox)
 from PySide6.QtGui import QIcon, QColor
@@ -89,22 +91,23 @@ class CustomConfig:
 class SSMConfig(CustomConfig):
     def __init__(self, parent_widget=None, viewer=None, main=None):
         super().__init__(parent_widget, viewer)
+        self.new_project_window = None
+
+    def new_project(self):
+        print("New")
+        if self.new_project_window is None:
+            self.new_project_window = NewSSM()
+            self.new_project_window.show()
+        else:
+            self.new_project_window.reset_form()
+            self.new_project_window.show()
+        pass
 
     def load(self, in_file=None):
         op = OpenFiles()
         self.current_file = in_file
         if in_file is None or not in_file:
             self.current_file = op.get_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
-
-
-class Articulate(CustomConfig):
-    def __init__(self, viewer=None):
-        super().__init__(viewer)
-
-
-class PCASSM(CustomConfig):
-    def __init__(self, viewer=None):
-        super().__init__(viewer)
 
 
 class MainMenuBar(QMenuBar):
@@ -123,6 +126,7 @@ class MainMenuBar(QMenuBar):
         self.save_action = None
         self.open_file = None
         self.splash = splash
+        self.new_project = None
 
         self.view3d = False
         if default_menus:
@@ -197,8 +201,15 @@ class O3dHelperApp(QMainWindow):
         self.main_widget.no_3d = [self.width, self.height]
         self.main_widget.with_3d = [int(0.8 * size.width()), self.height]
         self.qw = WorldView(self.main_widget, self)
+        self.ssm_panel = SSMInfoWidget(self, None)
 
-        self.main_widget.add(self.qw)
+        q = QWidget()
+        l = QHBoxLayout()
+        l.addWidget(self.qw)
+        l.addWidget(self.ssm_panel)
+        q.setLayout(l)
+
+        self.main_widget.add(q)
         self.main_widget.setObjectName('world_qw')
 
         self.setCentralWidget(self.main_widget)

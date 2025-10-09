@@ -236,3 +236,48 @@ class ProgressWidget(QWidget):
         self.hor.addWidget(self.step_label)
         self.hor.addWidget(self.pbar)
         self.setLayout(self.hor)
+
+
+class PCSlider(QWidget):
+    def __init__(self, label):
+        super().__init__()
+        self.label = label
+        self.the_label = QLabel('{0}: '.format(label))
+        self.slider = QSlider(Qt.Orientation.Horizontal, self)
+        self.slider.setRange(-100, 100)
+        self.slider.setValue(0)
+        self.slider.valueChanged.connect(self.update_text_box)
+        self.text_box = QLineEdit('0.0')
+        self.text_box.setFixedWidth(40)
+        self.hor = QHBoxLayout()
+        self.hor.addWidget(self.the_label)
+        self.hor.addWidget(self.slider)
+        self.hor.addWidget(self.text_box)
+        self.setLayout(self.hor)
+
+    def update_text_box(self):
+        print(self.slider.value())
+        self.text_box.setText("{0:0.2f}".format(self.slider.value()/50.0))
+
+
+class SSMInfoWidget(QWidget):
+
+    def __init__(self, parent, ssm):
+        super().__init__(parent)
+        self.root = parent
+        self.shape_model = ssm
+        self.number_pc = 9
+        self.vlayout = QVBoxLayout()
+        self.vlayout.addWidget(QLabel("Principal components (SD)"))
+        self.vlayout.addSpacing(5)
+        self.pc_control = {}
+        for i in range(0, self.number_pc):
+            pc_label = 'PC {0}'.format(i+1)
+            self.pc_control[pc_label] = PCSlider(pc_label)
+            self.vlayout.addWidget(self.pc_control[pc_label])
+        self.vlayout.addStretch(5)
+        self.setLayout(self.vlayout)
+        self.setFixedWidth(320)
+
+    def update_pcs(self):
+        pass
