@@ -10,3 +10,9 @@ src/scripts/resources/wheels/ptb/latest.txt
 src/__pycache__/__init__.cpython-312.pyc
 src/defaults/__pycache__/tools.cpython-312.pyc
 src/defaults/__pycache__/widgets.cpython-312.pyc
+.idea/workspace.xml
+src/__pycache__/o3d_viewer.cpython-312.pyc
+src/models/__pycache__/__init__.cpython-312.pyc
+src/models/__pycache__/shape.cpython-312.pyc
+src/util/__pycache__/__init__.cpython-312.pyc
+src/util/__pycache__/dialogs.cpython-312.pyc

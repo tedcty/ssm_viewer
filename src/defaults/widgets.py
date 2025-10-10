@@ -8,8 +8,6 @@ from PySide6.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBo
 from ptb.util.io.opendialog import OpenFiles
 from PySide6.QtCore import QPoint, Qt
 from ptb.util.lang import CommonSymbols
-from ptb.util.data import VTKMeshUtl
-import pandas as pd
 
 
 class InfoWidget(QWidget):
@@ -239,8 +237,9 @@ class ProgressWidget(QWidget):
 
 
 class PCSlider(QWidget):
-    def __init__(self, label):
+    def __init__(self, root, label):
         super().__init__()
+        self.root = root
         self.label = label
         self.the_label = QLabel('{0}: '.format(label))
         self.slider = QSlider(Qt.Orientation.Horizontal, self)
@@ -257,27 +256,78 @@ class PCSlider(QWidget):
 
     def update_text_box(self):
         print(self.slider.value())
-        self.text_box.setText("{0:0.2f}".format(self.slider.value()/50.0))
+        sdx = self.slider.value()/50.0
+        self.text_box.setText("{0:0.2f}".format(sdx))
+        self.root.update_pcs(self.label, sdx)
 
+    def reset(self):
+        self.text_box.setText("{0:0.2f}".format(0))
+        self.slider.setValue(0)
 
 class SSMInfoWidget(QWidget):
 
     def __init__(self, parent, ssm):
         super().__init__(parent)
         self.root = parent
-        self.shape_model = ssm
-        self.number_pc = 9
+        self.model = ssm
+        self.number_pc = 1
         self.vlayout = QVBoxLayout()
         self.vlayout.addWidget(QLabel("Principal components (SD)"))
         self.vlayout.addSpacing(5)
         self.pc_control = {}
         for i in range(0, self.number_pc):
             pc_label = 'PC {0}'.format(i+1)
-            self.pc_control[pc_label] = PCSlider(pc_label)
+            self.pc_control[pc_label] = PCSlider(self, pc_label)
             self.vlayout.addWidget(self.pc_control[pc_label])
         self.vlayout.addStretch(5)
+        self.reset_button = QPushButton("Rest")
+        self.reset_button.clicked.connect(self.rest)
+        self.vlayout.addWidget(self.reset_button)
         self.setLayout(self.vlayout)
         self.setFixedWidth(320)
+        self.sd = [0 for i in range(0, self.number_pc)]
 
-    def update_pcs(self):
+    def reset_number_pc(self, n):
+        print("Number of PCs")
+        print(n)
+        self.number_pc = n
+        pl = [p for p in self.pc_control]
+        for p in pl:
+            w = self.pc_control.pop(p)
+            w.deleteLater()
+            self.vlayout.removeWidget(w)
+        self.vlayout.removeWidget(self.reset_button)
+        # self.vlayout = QVBoxLayout()
+        idx = 1
+        for i in range(0, self.number_pc):
+            pc_label = 'PC {0}'.format(i+1)
+            self.pc_control[pc_label] = PCSlider(self, pc_label)
+            self.vlayout.insertWidget(idx, self.pc_control[pc_label])
+            idx += 1
+        self.vlayout.addWidget(self.reset_button)
+        self.setLayout(self.vlayout)
+        self.update()
+
+    def rest(self):
+        print("Rest")
+        self.sd = [0 for i in range(0, self.number_pc)]
+        try:
+            m = self.model.shape_model.reconstruct_diff_all(self.sd, True)
+            self.model.update_actor(m)
+        except AttributeError:
+            pass
+        pass
+        for pc_label in self.pc_control:
+            self.pc_control[pc_label].reset()
+
+
+    def update_pcs(self, pc_label, sdx):
+        print("update pc")
+        idx = int(pc_label.split(' ')[1])-1
+        self.sd[idx] = sdx
+        try:
+            m = self.model.shape_model.reconstruct_diff_all(self.sd, True)
+            self.model.update_actor(m)
+        except AttributeError:
+            pass
         pass

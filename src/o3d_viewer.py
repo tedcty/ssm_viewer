@@ -2,6 +2,7 @@ import sys
 import os
 from typing import Optional
 from ptb.util.io.opendialog import OpenFiles
+from ptb.util.data import VTKMeshUtl
 
 import time
 
@@ -10,6 +11,7 @@ from src.defaults.viewer import WorldView
 from src.defaults.widgets import SSMInfoWidget
 from src.defaults.tools import BasicIO
 from src.util.dialogs import NewSSM
+from src.models.shape import ShapeModel
 
 from PySide6.QtWidgets import (QMainWindow, QApplication, QMenuBar, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox)
 from PySide6.QtGui import QIcon, QColor
@@ -92,12 +94,24 @@ class SSMConfig(CustomConfig):
     def __init__(self, parent_widget=None, viewer=None, main=None):
         super().__init__(parent_widget, viewer)
         self.new_project_window = None
+        self.shape_model = None
+        self.geo = None
+        self.model_connector:ModelConnector = None
+        self.root = main
+
+    def update_model_connector(self):
+        self.model_connector.shape_model = self.shape_model
+        self.model_connector.mean_mesh_file = self.geo
+        self.model_connector.update_world()
 
     def new_project(self):
         print("New")
         if self.new_project_window is None:
-            self.new_project_window = NewSSM()
+            self.new_project_window = NewSSM(self)
             self.new_project_window.show()
+        elif self.new_project_window.isVisible():
+            self.new_project_window.activateWindow()
+            return
         else:
             self.new_project_window.reset_form()
             self.new_project_window.show()
@@ -110,6 +124,28 @@ class SSMConfig(CustomConfig):
             self.current_file = op.get_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
 
 
+class ModelConnector:
+    def __init__(self, qw):
+        self.shape_model: ShapeModel = None
+        self.mean_mesh_file = None
+        self.qw:WorldView = qw
+        self.mean_mesh_actor = None
+        self.mean_mesh_poly = None
+        self.model_name = None
+
+    def update_world(self):
+        model_path = os.path.split(self.mean_mesh_file)
+        self.model_name = model_path[1][: model_path[1].rindex('.')]
+        self.mean_mesh_actor = self.qw.world.add_actor(filename=self.mean_mesh_file)
+        self.mean_mesh_poly = self.mean_mesh_actor.GetMapper().GetInput()
+        self.qw.refresh_model_name(self.model_name)
+        self.qw.reset_view()
+
+    def update_actor(self, points):
+        self.mean_mesh_poly = VTKMeshUtl.update_poly_w_points(points, self.mean_mesh_poly)
+        p = VTKMeshUtl.extract_points(self.mean_mesh_actor)
+        self.qw.world.update_view()
+
 class MainMenuBar(QMenuBar):
     debug = False
 
@@ -118,9 +154,12 @@ class MainMenuBar(QMenuBar):
         print("MainMenuBar")
         self.par.par.qw.on_focus()
 
+    def set_model_connector(self, model_connector):
+        self.config_me.model_connector = model_connector
+
     def __init__(self, parent=None, view=None, default_menus=True, splash=None):
         super().__init__(parent)
-        self.config_me = SSMConfig(view)
+        self.config_me = SSMConfig(view, main=parent)
         self.par: Optional[MainWidget, None] = parent
         self.view = view
         self.save_action = None
@@ -201,7 +240,9 @@ class O3dHelperApp(QMainWindow):
         self.main_widget.no_3d = [self.width, self.height]
         self.main_widget.with_3d = [int(0.8 * size.width()), self.height]
         self.qw = WorldView(self.main_widget, self)
-        self.ssm_panel = SSMInfoWidget(self, None)
+        self.model_connector = ModelConnector(self.qw)
+        self.main_widget.menu_bar.set_model_connector(self.model_connector)
+        self.ssm_panel = SSMInfoWidget(self, self.model_connector)
 
         q = QWidget()
         l = QHBoxLayout()

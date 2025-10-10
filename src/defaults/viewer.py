@@ -91,6 +91,10 @@ class World:
         self.vtk_widget.Initialize()
         self.vtk_widget.Start()
 
+    def update_view(self):
+        self.vtk_widget.update()
+        self.vtk_widget.focusWidget()
+
     def reset_view(self):
         self.ren.ResetCamera()
         self.vtk_widget.update()
@@ -832,6 +836,8 @@ class WorldView(QWidget):
         # self.expanded_button2.setVisible(False)
 
         self.world.start_world()
+    def refresh_model_name(self, pid):
+        self.model_name_widget.setText(pid)
 
     def make_mask(self, my_widget):
         # Create a QPixmap with the same size as the window, filled with a transparent color
@@ -1183,11 +1189,28 @@ class HoverLabel(QWidget):
     def text(self):
         return self.labe.text()
 
+    def setText(self, txt):
+        self.labe.setText(txt)
+        sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
+        w = int(sizing.width())
+        w = int(np.round(1.5*w, 0))
+        h = int(sizing.height())
+        print(w)
+        print(h)
+        print(self.size())
+        self.setMinimumWidth(w)
+        self.setMinimumHeight(h)
+        self.button_loc4 = QPoint(int((self.listener.app_win.width / 2.0) - 1.5 * w), 0)
+        self.move(self.button_loc4)
+        self.setMask(self.make_mask())
+        self.update()
+
     def get_size(self):
         return self.labe.fontMetrics().boundingRect(self.labe.text())
 
     def __init__(self, parent, listener, text):
         super().__init__(parent)
+        self.root = parent
         self.listener = listener
         self.labe = QLabel(self)
         self.labe.setText(text)
