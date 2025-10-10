@@ -100,6 +100,7 @@ class SSMConfig(CustomConfig):
         self.geo = None
         self.model_connector:ModelConnector = None
         self.root = main
+        self.current_file = None
 
     def update_model_connector(self):
         self.model_connector.shape_model = self.shape_model
@@ -107,12 +108,18 @@ class SSMConfig(CustomConfig):
         self.model_connector.update_world()
 
     def save(self):
-        ret = {'pc': self.new_project_window.current_pc_file,
-               'mean_mesh': self.new_project_window.current_mean_file}
+        try:
+            ret = {'pc': self.new_project_window.current_pc_file,
+                   'mean_mesh': self.new_project_window.current_mean_file}
+        except AttributeError:
+            print("nothing to save")
+            return
         op = OpenFiles()
         # save = op.get_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
-        save = op.getSaveFileName(filter=("SSM (*.ssm);;All Files (*.*)"))
+        save = op.get_save_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
         if save is not None:
+            if not save.endswith('.ssm'):
+                save = save+'.ssm'
             if os.path.exists(save):
                 return
             JSONSUtl.write_json(save, ret)
@@ -136,6 +143,19 @@ class SSMConfig(CustomConfig):
         self.current_file = in_file
         if in_file is None or not in_file:
             self.current_file = op.get_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
+            file_paths = JSONSUtl.load_json(self.current_file)
+            if os.path.exists(file_paths['pc']) and os.path.exists(file_paths['mean_mesh']):
+                self.new_project_window = NewSSM(self)
+                self.new_project_window.current_pc_file = file_paths['pc']
+                self.new_project_window.current_mean_file = file_paths['mean_mesh']
+                self.shape_model = ShapeModel(file_paths['pc'])
+                self.geo = file_paths['mean_mesh']
+                self.update_model_connector()
+            else:
+                if not os.path.exists(file_paths['pc']):
+                    print("PC file not found: {0}".format(file_paths['pc']))
+                if not os.path.exists(file_paths['mean_mesh']):
+                    print("Mean Mesh file not found: {0}".format(file_paths['mean_mesh']))
 
 
 class ModelConnector:
@@ -326,4 +346,4 @@ if __name__ == "__main__":
     ex = O3dHelperApp(current_screen)
     ex.show()
     sys.exit(app.exec())
-    pass
+
