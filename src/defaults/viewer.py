@@ -1195,12 +1195,11 @@ class HoverLabel(QWidget):
         w = int(sizing.width())
         w = int(np.round(1.5*w, 0))
         h = int(sizing.height())
-        print(w)
-        print(h)
-        print(self.size())
+
         self.setMinimumWidth(w)
         self.setMinimumHeight(h)
-        self.button_loc4 = QPoint(int((self.listener.app_win.width / 2.0) - 1.5 * w), 0)
+        #self.button_loc4 = QPoint(int((self.listener.app_win.width / 2.0) - 1.5 * w), 0)
+        self.button_loc4 = QPoint(-10, 0)
         self.move(self.button_loc4)
         self.setMask(self.make_mask())
         self.update()
@@ -1248,7 +1247,8 @@ class HoverLabel(QWidget):
 
         print(app_k.width() / 2)
         w0 = np.round((app_k.width() / 2.0) - (w / 2.0), 0 ) + 20
-        self.button_loc4 = QPoint(int(w0), 0)
+        self.button_loc4 = QPoint(-10, 0)
+        #self.button_loc4 = QPoint(int(w0), 0)
         self.move(self.button_loc4)
         self.setMask(self.make_mask())
         self.update()

@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBo
 from ptb.util.io.opendialog import OpenFiles
 from PySide6.QtCore import QPoint, Qt
 from ptb.util.lang import CommonSymbols
+from ptb.util.io.helper import BasicIO
 
 
 class InfoWidget(QWidget):
@@ -240,6 +241,7 @@ class PCSlider(QWidget):
     def __init__(self, root, label):
         super().__init__()
         self.root = root
+        self.setObjectName("PCSlider")
         self.label = label
         self.the_label = QLabel('{0}: '.format(label))
         self.slider = QSlider(Qt.Orientation.Horizontal, self)
@@ -252,6 +254,8 @@ class PCSlider(QWidget):
         self.hor.addWidget(self.the_label)
         self.hor.addWidget(self.slider)
         self.hor.addWidget(self.text_box)
+        self.setFixedHeight(50)
+        self.setFixedWidth(280)
         self.setLayout(self.hor)
 
     def update_text_box(self):
@@ -268,28 +272,36 @@ class SSMInfoWidget(QWidget):
 
     def __init__(self, parent, ssm):
         super().__init__(parent)
+        self.setStyleSheet(BasicIO.read_as_block("./defaults/ssminfo.qss"))
         self.root = parent
         self.model = ssm
-        self.number_pc = 1
+        self.number_pc = 9
         self.vlayout = QVBoxLayout()
         self.vlayout.addWidget(QLabel("Principal components (SD)"))
         self.vlayout.addSpacing(5)
         self.vlayout_scroll = QVBoxLayout()
         self.pc_control = {}
         self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setFixedWidth(300)
+        self.scroll.setMinimumHeight(550)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.box = QWidget()
-        self.box.setMinimumWidth(300)
-        self.box.setMinimumHeight(500)
+        self.box.setFixedWidth(300)
         for i in range(0, self.number_pc):
             pc_label = 'PC {0}'.format(i+1)
             self.pc_control[pc_label] = PCSlider(self, pc_label)
             self.vlayout_scroll.addWidget(self.pc_control[pc_label])
         self.vlayout_scroll.addStretch(5)
         self.box.setLayout(self.vlayout_scroll)
-        self.vlayout.addWidget(self.box)
+        self.scroll.setWidget(self.box)
+
+        self.vlayout.addWidget(self.scroll)
         self.vlayout.addStretch(5)
-        self.reset_button = QPushButton("Rest")
-        self.reset_button.clicked.connect(self.rest)
+        self.reset_button = QPushButton("Reset")
+        self.reset_button.setFixedHeight(35)
+        self.reset_button.clicked.connect(self.reset)
         self.vlayout.addWidget(self.reset_button)
         self.setLayout(self.vlayout)
         self.setFixedWidth(320)
@@ -298,24 +310,26 @@ class SSMInfoWidget(QWidget):
     def reset_number_pc(self, n):
         print("Number of PCs")
         print(n)
-        self.number_pc = n
+
         pl = [p for p in self.pc_control]
-        self.sd = [0 for i in range(0, self.number_pc)]
         for p in pl:
             w = self.pc_control.pop(p)
             w.deleteLater()
             self.vlayout_scroll.removeWidget(w)
+        self.number_pc = n
+        self.sd = [0 for i in range(0, self.number_pc)]
         idx = 0
         for i in range(0, self.number_pc):
             pc_label = 'PC {0}'.format(i+1)
             self.pc_control[pc_label] = PCSlider(self, pc_label)
             self.vlayout_scroll.insertWidget(idx, self.pc_control[pc_label])
             idx += 1
+        self.box.update()
         self.update()
 
-    def rest(self):
-        print("Rest")
-        self.sd = [0 for i in range(0, self.number_pc)]
+    def reset(self):
+        print("Reset")
+        self.sd = [0 for i in range(0, self.model.shape_model.weights.shape[0])]
         try:
             m = self.model.shape_model.reconstruct_diff_all(self.sd, True)
             self.model.update_actor(m)
