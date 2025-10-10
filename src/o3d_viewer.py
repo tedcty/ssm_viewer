@@ -1,6 +1,8 @@
 import sys
 import os
 from typing import Optional
+
+from ptb.util.io.helper import JSONSUtl
 from ptb.util.io.opendialog import OpenFiles
 from ptb.util.data import VTKMeshUtl
 
@@ -103,6 +105,18 @@ class SSMConfig(CustomConfig):
         self.model_connector.shape_model = self.shape_model
         self.model_connector.mean_mesh_file = self.geo
         self.model_connector.update_world()
+
+    def save(self):
+        ret = {'pc': self.new_project_window.current_pc_file,
+               'mean_mesh': self.new_project_window.current_mean_file}
+        op = OpenFiles()
+        # save = op.get_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
+        save = op.getSaveFileName(filter=("SSM (*.ssm);;All Files (*.*)"))
+        if save is not None:
+            if os.path.exists(save):
+                return
+            JSONSUtl.write_json(save, ret)
+        pass
 
     def new_project(self):
         print("New")
