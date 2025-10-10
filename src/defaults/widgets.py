@@ -4,7 +4,7 @@ import numpy as np
 import vtk
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox, QHBoxLayout,
-                               QVBoxLayout, QProgressBar, QColorDialog, QSlider)
+                               QVBoxLayout, QProgressBar, QColorDialog, QSlider, QScrollArea)
 from ptb.util.io.opendialog import OpenFiles
 from PySide6.QtCore import QPoint, Qt
 from ptb.util.lang import CommonSymbols
@@ -274,11 +274,19 @@ class SSMInfoWidget(QWidget):
         self.vlayout = QVBoxLayout()
         self.vlayout.addWidget(QLabel("Principal components (SD)"))
         self.vlayout.addSpacing(5)
+        self.vlayout_scroll = QVBoxLayout()
         self.pc_control = {}
+        self.scroll = QScrollArea()
+        self.box = QWidget()
+        self.box.setMinimumWidth(300)
+        self.box.setMinimumHeight(500)
         for i in range(0, self.number_pc):
             pc_label = 'PC {0}'.format(i+1)
             self.pc_control[pc_label] = PCSlider(self, pc_label)
-            self.vlayout.addWidget(self.pc_control[pc_label])
+            self.vlayout_scroll.addWidget(self.pc_control[pc_label])
+        self.vlayout_scroll.addStretch(5)
+        self.box.setLayout(self.vlayout_scroll)
+        self.vlayout.addWidget(self.box)
         self.vlayout.addStretch(5)
         self.reset_button = QPushButton("Rest")
         self.reset_button.clicked.connect(self.rest)
@@ -292,20 +300,17 @@ class SSMInfoWidget(QWidget):
         print(n)
         self.number_pc = n
         pl = [p for p in self.pc_control]
+        self.sd = [0 for i in range(0, self.number_pc)]
         for p in pl:
             w = self.pc_control.pop(p)
             w.deleteLater()
-            self.vlayout.removeWidget(w)
-        self.vlayout.removeWidget(self.reset_button)
-        # self.vlayout = QVBoxLayout()
-        idx = 1
+            self.vlayout_scroll.removeWidget(w)
+        idx = 0
         for i in range(0, self.number_pc):
             pc_label = 'PC {0}'.format(i+1)
             self.pc_control[pc_label] = PCSlider(self, pc_label)
-            self.vlayout.insertWidget(idx, self.pc_control[pc_label])
+            self.vlayout_scroll.insertWidget(idx, self.pc_control[pc_label])
             idx += 1
-        self.vlayout.addWidget(self.reset_button)
-        self.setLayout(self.vlayout)
         self.update()
 
     def rest(self):
@@ -325,6 +330,7 @@ class SSMInfoWidget(QWidget):
         print("update pc")
         idx = int(pc_label.split(' ')[1])-1
         self.sd[idx] = sdx
+        print(idx)
         try:
             m = self.model.shape_model.reconstruct_diff_all(self.sd, True)
             self.model.update_actor(m)
