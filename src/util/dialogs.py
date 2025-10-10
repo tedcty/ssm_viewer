@@ -8,11 +8,20 @@ from ptb.util.io.helper import BasicIO
 from src.models.shape import ShapeModel
 
 
+
+class Preference(QWidget):
+
+    def __init__(self, root):
+        super().__init__()
+        self.root = root
+        layout = QVBoxLayout()
+        self.setFixedWidth(500)
+        self.setFixedHeight(600)
+        self.setWindowTitle("Preferences")
+        self.setStyleSheet(BasicIO.read_as_block("./defaults/dialog.qss"))
+
+
 class NewSSM(QWidget):
-    """
-    This "window" is a QWidget. If it has no parent, it
-    will appear as a free-floating window as we want.
-    """
 
     def __init__(self, root):
         super().__init__()

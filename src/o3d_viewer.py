@@ -26,7 +26,7 @@ class MainWidget(QWidget):
         self.par = parent
         self.layout = QVBoxLayout()
         self.menu_bar = MainMenuBar(parent=self)
-        self.config = CustomConfig(self)
+        #self.config = CustomConfig(self)
         # self.menu_bar.add_open_action(self.config.load)
         self.setStyleSheet(self.menu_bar.sty)
         self.layout.setMenuBar(self.menu_bar)
@@ -56,6 +56,9 @@ class MainWidget(QWidget):
 
     def add(self, widget):
         self.layout.addWidget(widget)
+
+    def set_preferences(self, handle):
+        self.menu_bar.add_preferences(handle)
 
     def set_save_action(self, handle):
         self.menu_bar.add_save_action(handle)
@@ -200,6 +203,7 @@ class MainMenuBar(QMenuBar):
         self.open_file = None
         self.splash = splash
         self.new_project = None
+        self.preferences = None
 
         self.view3d = False
         if default_menus:
@@ -216,6 +220,8 @@ class MainMenuBar(QMenuBar):
     def add_open_action(self, open_func):
         self.open_file.triggered.connect(open_func)
 
+    def add_preferences(self, prefer):
+        self.preferences.triggered.connect(prefer)
     def default_menus(self):
         action_file = self.addMenu("File")
         new_file = action_file.addAction("New")
@@ -232,11 +238,12 @@ class MainMenuBar(QMenuBar):
         quit_action.setIcon(QIcon('./icons/power.png'))
         quit_action.triggered.connect(self.config_me.on_exit)
         action_edit = self.addMenu("Edit")
-        prefer = action_edit.addAction("Preferences")
-        prefer.setIcon(QIcon('../MVP_gui2/icons/slider.png'))
+        self.preferences = action_edit.addAction("Preferences")
+        self.preferences.setIcon(QIcon('./icons/slider.png'))
         action_view = self.addMenu("View")
         view3 = action_view.addAction("Reset Zoom")
         view3.triggered.connect(self.reset_view)
+        view3.setIcon(QIcon('./icons/zoom_reset.png'))
         action_help = self.addMenu("Help")
         about = action_help.addAction("About")
         about.setIcon(QIcon('./icons/info.png'))
@@ -268,6 +275,7 @@ class O3dHelperApp(QMainWindow):
         self.left = int((size.width()-self.width)/2)
         self.top = int((size.height()-self.height)/2)
         self.setWindowTitle(self.title)
+        self.setWindowIcon(QIcon('./icons/vector-alt.png'))
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         self.main_widget = MainWidget(self)
