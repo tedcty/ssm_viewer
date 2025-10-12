@@ -19,7 +19,7 @@ from ptb.util.lang import CommonSymbols
 import os
 import numpy as np
 import random
-from src.defaults.widgets import MeshInfoWidget, InfoWidget, AngleInfoWidget
+from ssm_gui.defaults.widgets import MeshInfoWidget, InfoWidget, AngleInfoWidget
 from scipy.optimize import minimize
 
 
@@ -474,7 +474,7 @@ class ModelConnector:
 #         c = os.getcwd()
 #         root = '{0}/{1}'.format(c,'example/')
 #         if platform.system() == 'Linux':
-#             root = '/home/tree/RepoLib/sand/shapetoolsrepo/src/gui/forearm/example/'
+#             root = '/home/tree/RepoLib/sand/shapetoolsrepo/ssm_gui/gui/forearm/example/'
 #         # root = 'D:/Work/upper_limb/posed/'
 #
 #         files = [m for m in os.listdir(root) if m.endswith('.ply') or m.endswith('.stl')]

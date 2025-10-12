@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (QLabel, QVBoxLayout, QHBoxLayout, QWidget, QLineE
 from PySide6.QtGui import QIcon
 from ptb.util.io.opendialog import OpenFiles
 from ptb.util.io.helper import BasicIO
-from src.models.shape import ShapeModel
+from ssm_gui.models.shape import ShapeModel
 
 
 

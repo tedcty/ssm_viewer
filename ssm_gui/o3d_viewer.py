@@ -9,11 +9,11 @@ from ptb.util.data import VTKMeshUtl
 import time
 
 from threading import Thread
-from src.defaults.viewer import WorldView
-from src.defaults.widgets import SSMInfoWidget
-from src.defaults.tools import BasicIO
-from src.util.dialogs import NewSSM
-from src.models.shape import ShapeModel
+from ssm_gui.defaults.viewer import WorldView
+from ssm_gui.defaults.widgets import SSMInfoWidget
+from ssm_gui.defaults.tools import BasicIO
+from ssm_gui.util.dialogs import NewSSM
+from ssm_gui.models.shape import ShapeModel
 
 from PySide6.QtWidgets import (QMainWindow, QApplication, QMenuBar, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox)
 from PySide6.QtGui import QIcon, QColor
