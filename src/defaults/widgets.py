@@ -288,6 +288,7 @@ class SSMInfoWidget(QWidget):
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.box = QWidget()
+        self.box.setObjectName('box')
         self.box.setFixedWidth(300)
         for i in range(0, self.number_pc):
             pc_label = 'PC {0}'.format(i+1)
@@ -298,7 +299,7 @@ class SSMInfoWidget(QWidget):
         self.scroll.setWidget(self.box)
 
         self.vlayout.addWidget(self.scroll)
-        self.vlayout.addStretch(5)
+        #self.vlayout.addStretch(5)
         self.reset_button = QPushButton("Reset")
         self.reset_button.setFixedHeight(35)
         self.reset_button.clicked.connect(self.reset)
@@ -345,6 +346,7 @@ class SSMInfoWidget(QWidget):
         idx = int(pc_label.split(' ')[1])-1
         self.sd[idx] = sdx
         print(idx)
+        print(self.sd)
         try:
             m = self.model.shape_model.reconstruct_diff_all(self.sd, True)
             self.model.update_actor(m)

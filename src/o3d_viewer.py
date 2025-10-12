@@ -154,6 +154,7 @@ class SSMConfig(CustomConfig):
                 self.shape_model = ShapeModel(file_paths['pc'])
                 self.geo = file_paths['mean_mesh']
                 self.update_model_connector()
+                self.root.par.ssm_panel.reset_number_pc(self.shape_model.weights.shape[0])
             else:
                 if not os.path.exists(file_paths['pc']):
                     print("PC file not found: {0}".format(file_paths['pc']))

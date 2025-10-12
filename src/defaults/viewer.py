@@ -133,7 +133,8 @@ class World:
                 mapper.SetInputData(polydata)
             actor = vtk.vtkActor()
             actor.SetMapper(mapper)
-            actor.GetProperty().SetColor(0, 100/255, 200/255)
+            #actor.GetProperty().SetColor(0, 100/255, 200/255)
+            actor.GetProperty().SetColor(242 / 255.0, 238 / 255.0, 220 / 255.0)
             actor_name = path_elements[-1][:path_elements[-1].rindex(".")]
             self.actors[actor_name] = actor
             self.ren.AddActor(self.actors[actor_name])

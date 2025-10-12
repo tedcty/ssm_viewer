@@ -5,6 +5,22 @@
     border-width: 0px;
     border-style: Transparent;
     padding: 5px;
+    background-color: "#404040";
+}
+
+#box{
+    background-color: "#404040";
+    border-radius: 8px;
+}
+
+QScrollArea{
+border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    border-color: "#3B3838";
+    color: "#dbdbd9";
+    padding: 5px;
+    border-radius: 8px;
 }
 
 QPushButton {
@@ -28,6 +44,7 @@ QPushButton:hover { /* when user selects item using mouse or keyboard */
 
 QLineEdit{
     color: "#f5f3eb";
+    background-color: "#505050";
     font: bold 14px;
 }
 
