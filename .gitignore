@@ -36,3 +36,9 @@ ssm_gui/example/landmarks/landmarkpose/ulna.stl
 ssm_gui/example/landmarks/landmarkpose/ulna_combo.stl
 ssm_gui/build/
 ssm_gui/dist/
+src/__pycache__/
+src/defaults/__pycache__/__init__.cpython-312.pyc
+src/defaults/__pycache__/
+src/models/__pycache__/
+src/scripts/resources/wheels/ptb/latest.txt
+src/util/__pycache__/
