@@ -1,23 +1,23 @@
 import sys
 import os
 from typing import Optional
-
-from ptb.util.io.helper import JSONSUtl
-from ptb.util.io.opendialog import OpenFiles
-from ptb.util.data import VTKMeshUtl
-
 import time
 
-from threading import Thread
+from PySide6.QtWidgets import (QMainWindow, QApplication, QMenuBar, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox)
+from PySide6.QtGui import QIcon, QColor
+from PySide6.QtCore import QSize, Qt
+
 from ssm_gui.defaults.viewer import WorldView
 from ssm_gui.defaults.widgets import SSMInfoWidget
 from ssm_gui.defaults.tools import BasicIO
 from ssm_gui.util.dialogs import NewSSM
 from ssm_gui.models.shape import ShapeModel
 
-from PySide6.QtWidgets import (QMainWindow, QApplication, QMenuBar, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox)
-from PySide6.QtGui import QIcon, QColor
-from PySide6.QtCore import QSize, Qt
+from ptb.util.io.helper import JSONSUtl
+from ptb.util.io.opendialog import OpenFiles
+from ptb.util.data import VTKMeshUtl
+
+from threading import Thread
 
 
 class MainWidget(QWidget):
@@ -146,6 +146,7 @@ class SSMConfig(CustomConfig):
         self.current_file = in_file
         if in_file is None or not in_file:
             self.current_file = op.get_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
+        if self.current_file is not None and os.path.exists(self.current_file):
             file_paths = JSONSUtl.load_json(self.current_file)
             if os.path.exists(file_paths['pc']) and os.path.exists(file_paths['mean_mesh']):
                 self.new_project_window = NewSSM(self)

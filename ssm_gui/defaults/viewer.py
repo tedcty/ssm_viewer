@@ -1,26 +1,19 @@
-import copy
-import platform
-
-import pandas as pd
 import vtk
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from scipy.spatial.transform import Rotation
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from PySide6.QtWidgets import (QLabel, QPushButton, QGraphicsOpacityEffect, QSlider)
-from PySide6.QtGui import QIcon, QPainterPath, QRegion, QPainter, QPixmap, QColor
+from PySide6.QtWidgets import (QLabel, QPushButton)
+from PySide6.QtGui import QIcon, QPainterPath, QPainter, QPixmap
 from PySide6.QtCore import QPoint, Qt
 
 from ptb.util.io.helper import BasicIO
 from ptb.util.io.opendialog import OpenFiles
-from ptb.util.data import VTKMeshUtl, TRC
-from ptb.util.math.transformation import Trig, PCAModel, Cloud
+from ptb.util.data import VTKMeshUtl
 from ptb.util.lang import CommonSymbols
 import os
 import numpy as np
-import random
+
 from ssm_gui.defaults.widgets import MeshInfoWidget, InfoWidget, AngleInfoWidget
-from scipy.optimize import minimize
 
 
 class WorldPolyDataHelper:

@@ -6,7 +6,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox, QHBoxLayout,
                                QVBoxLayout, QProgressBar, QColorDialog, QSlider, QScrollArea)
 from ptb.util.io.opendialog import OpenFiles
-from PySide6.QtCore import QPoint, Qt
+from PySide6.QtCore import Qt
 from ptb.util.lang import CommonSymbols
 from ptb.util.io.helper import BasicIO
 
@@ -330,8 +330,8 @@ class SSMInfoWidget(QWidget):
 
     def reset(self):
         print("Reset")
-        self.sd = [0 for i in range(0, self.model.shape_model.weights.shape[0])]
         try:
+            self.sd = [0 for i in range(0, self.model.shape_model.weights.shape[0])]
             m = self.model.shape_model.reconstruct_diff_all(self.sd, True)
             self.model.update_actor(m)
         except AttributeError:
