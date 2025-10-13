@@ -109,6 +109,7 @@ class NewSSM(QWidget):
         if self.current_pc_file is not None and self.current_mean_file is not None:
             if os.path.exists(self.current_pc_file) and os.path.exists(self.current_mean_file):
                 if self.root is not None:
+                    self.root.root.par.qw.clear_view()
                     self.root.shape_model = ShapeModel(self.current_pc_file)
                     self.root.geo = self.current_mean_file
                     self.root.update_model_connector()

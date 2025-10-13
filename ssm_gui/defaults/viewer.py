@@ -855,9 +855,14 @@ class WorldView(QWidget):
         print("on closed")
         pass
 
+    def add_origin(self):
+        self.world.add_actor(actor_name='Origin', actor=self.world.origin)
+
     def clear_view(self):
         self.current_model = None
         self.world.remove_all()
+        self.add_origin()
+        self.world.update_view()
 
     def add_mesh(self, file_name):
         self.world.add_actor(filename=file_name)

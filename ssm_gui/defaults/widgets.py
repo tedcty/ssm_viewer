@@ -342,11 +342,11 @@ class SSMInfoWidget(QWidget):
 
 
     def update_pcs(self, pc_label, sdx):
-        print("update pc")
+        # print("update pc")
         idx = int(pc_label.split(' ')[1])-1
         self.sd[idx] = sdx
-        print(idx)
-        print(self.sd)
+        # print(idx)
+        # print(self.sd)
         try:
             m = self.model.shape_model.reconstruct_diff_all(self.sd, True)
             self.model.update_actor(m)

@@ -149,6 +149,7 @@ class SSMConfig(CustomConfig):
         if self.current_file is not None and os.path.exists(self.current_file):
             file_paths = JSONSUtl.load_json(self.current_file)
             if os.path.exists(file_paths['pc']) and os.path.exists(file_paths['mean_mesh']):
+                self.root.par.qw.clear_view()
                 self.new_project_window = NewSSM(self)
                 self.new_project_window.current_pc_file = file_paths['pc']
                 self.new_project_window.current_mean_file = file_paths['mean_mesh']
