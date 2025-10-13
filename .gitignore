@@ -42,3 +42,4 @@ src/defaults/__pycache__/
 src/models/__pycache__/
 src/scripts/resources/wheels/ptb/latest.txt
 src/util/__pycache__/
+.idea/
