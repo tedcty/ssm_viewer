@@ -8,7 +8,7 @@ from PySide6.QtGui import QIcon, QColor
 from PySide6.QtCore import QSize, Qt
 
 from ssm_gui.defaults.viewer import WorldView
-from ssm_gui.defaults.widgets import SSMInfoWidget
+from ssm_gui.defaults.widgets import SSMInfoWidget, CameraWidget
 from ssm_gui.defaults.tools import BasicIO
 from ssm_gui.util.dialogs import NewSSM
 from ssm_gui.models.shape import ShapeModel
@@ -307,10 +307,12 @@ class O3dHelperApp(QMainWindow):
         self.model_connector = ModelConnector(self.qw)
         self.main_widget.menu_bar.set_model_connector(self.model_connector)
         self.ssm_panel = SSMInfoWidget(self, self.model_connector)
+        self.camera_widget = CameraWidget(self, self.qw)
 
         q = QWidget()
         l = QHBoxLayout()
         l.addWidget(self.qw)
+        l.addWidget(self.camera_widget)
         l.addWidget(self.ssm_panel)
         q.setLayout(l)
 

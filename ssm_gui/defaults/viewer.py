@@ -1,8 +1,7 @@
 import vtk
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
-from PySide6.QtWidgets import QWidget, QVBoxLayout
 
-from PySide6.QtWidgets import (QLabel, QPushButton)
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton)
 from PySide6.QtGui import QIcon, QPainterPath, QPainter, QPixmap
 from PySide6.QtCore import QPoint, Qt
 
@@ -111,6 +110,32 @@ class World:
         camera = self.ren.GetActiveCamera()
         camera.SetPosition(self.camera_orientation['position'])
         camera.SetViewUp(self.camera_orientation['view up'])
+        self.ren.ResetCamera()
+        self.vtk_widget.update()
+        self.vtk_widget.focusWidget()
+
+    def to_x_view(self):
+        camera = self.ren.GetActiveCamera()
+        camera.SetPosition(self.camera_orientation['position'])
+        camera.SetViewUp((1, 0, 0))
+        self.ren.ResetCamera()
+        self.vtk_widget.update()
+        self.vtk_widget.focusWidget()
+
+    def to_y_view(self):
+        camera = self.ren.GetActiveCamera()
+        camera.SetPosition(self.camera_orientation['position'])
+        camera.SetViewUp((0, 1, 0))
+        self.ren.ResetCamera()
+        self.vtk_widget.update()
+        self.vtk_widget.focusWidget()
+
+    def to_z_view(self):
+        camera = self.ren.GetActiveCamera()
+        camera.SetPosition(self.camera_orientation['position'])
+        camera.SetViewUp((0, 1, 0))
+        camera.Azimuth(90)
+        camera.SetViewUp((0, 0, 1))
         self.ren.ResetCamera()
         self.vtk_widget.update()
         self.vtk_widget.focusWidget()
@@ -1266,7 +1291,7 @@ class HoverLabel(QWidget):
         self.setFixedWidth(w)
         self.setFixedHeight(h)
 
-        self.vl = QVBoxLayout()
+        self.vl = QHBoxLayout()
         self.vl.addWidget(self.labe)
         self.setLayout(self.vl)
         self.button_loc4 = QPoint(int((self.listener.app_win.width / 2.0)-w/2.0 - 0.1*w), 0)

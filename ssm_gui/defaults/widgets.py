@@ -3,7 +3,7 @@ import os
 import numpy as np
 import vtk
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton, QCheckBox, QHBoxLayout,
                                QVBoxLayout, QProgressBar, QColorDialog, QSlider, QScrollArea, QMessageBox)
 from ptb.util.io.opendialog import OpenFiles
@@ -454,3 +454,45 @@ class SSMInfoWidget(QWidget):
         except AttributeError:
             pass
         pass
+
+
+class CameraWidget(QWidget):
+
+    def __init__(self, parent, view):
+        super().__init__(parent)
+        self.view = view
+        self.setStyleSheet(BasicIO.read_as_block("./defaults/ssminfo.qss"))
+        self.root = parent
+        self.vlayout = QVBoxLayout()
+        labe = QWidget()
+        hv = QHBoxLayout()
+        pixmap = QPixmap('./icons/camera.png')
+        scaled_pixmap = pixmap.scaled(
+            35, 35, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation
+        )
+        label = QLabel()
+        label.setPixmap(scaled_pixmap)
+        hv.addWidget(label)
+        labe.setLayout(hv)
+        self.x = QPushButton('X')
+        self.x.clicked.connect(self.on_x_clicked)
+        self.y = QPushButton('Y')
+        self.y.clicked.connect(self.on_y_clicked)
+        self.z = QPushButton('Z')
+        self.z.clicked.connect(self.on_z_clicked)
+        self.vlayout.addWidget(labe)
+        self.vlayout.addSpacing(5)
+        self.vlayout.addWidget(self.x)
+        self.vlayout.addWidget(self.y)
+        self.vlayout.addWidget(self.z)
+        self.vlayout.addStretch(10)
+        self.setLayout(self.vlayout)
+
+    def on_x_clicked(self):
+        self.view.world.to_x_view()
+
+    def on_y_clicked(self):
+        self.view.world.to_y_view()
+
+    def on_z_clicked(self):
+        self.view.world.to_z_view()
