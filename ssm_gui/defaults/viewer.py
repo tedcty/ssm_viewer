@@ -12,6 +12,7 @@ from ptb.util.data import VTKMeshUtl
 from ptb.util.lang import CommonSymbols
 import os
 import numpy as np
+import copy
 
 from ssm_gui.defaults.widgets import MeshInfoWidget, InfoWidget, AngleInfoWidget
 
@@ -83,12 +84,44 @@ class World:
 
         self.vtk_widget.Initialize()
         self.vtk_widget.Start()
+        camera = self.ren.GetActiveCamera()
+        self.camera_orientation = {}
+        self.camera_orientation['position'] = camera.GetPosition()
+        self.camera_orientation['focal point'] = camera.GetFocalPoint()
+        self.camera_orientation['view up'] = (0, 1, 0)
+        self.camera_orientation['distance'] = camera.GetDistance()
+        self.camera_orientation['clipping range'] = camera.GetClippingRange()
+        self.camera_orientation['orientation'] = camera.GetOrientation()
+        pass
 
     def update_view(self):
         self.vtk_widget.update()
         self.vtk_widget.focusWidget()
 
+
+    def reset_zoom(self, on_load=False):
+        self.ren.ResetCamera()
+        if on_load:
+            camera = self.ren.GetActiveCamera()
+            self.camera_orientation['position'] = camera.GetPosition()
+        self.vtk_widget.update()
+        self.vtk_widget.focusWidget()
+
+    def reset_view_orientation(self):
+        camera = self.ren.GetActiveCamera()
+        camera.SetPosition(self.camera_orientation['position'])
+        camera.SetViewUp(self.camera_orientation['view up'])
+        self.ren.ResetCamera()
+        self.vtk_widget.update()
+        self.vtk_widget.focusWidget()
+
     def reset_view(self):
+        camera = self.ren.GetActiveCamera()
+        camera.SetPosition(self.camera_orientation['position'])
+        camera.SetFocalPoint(self.camera_orientation['focal point'])
+        camera.SetViewUp(self.camera_orientation['view up'])
+        camera.SetDistance(self.camera_orientation['distance'])
+        camera.SetClippingRange(self.camera_orientation['clipping range'])
         self.ren.ResetCamera()
         self.vtk_widget.update()
         self.vtk_widget.focusWidget()
@@ -866,10 +899,13 @@ class WorldView(QWidget):
 
     def add_mesh(self, file_name):
         self.world.add_actor(filename=file_name)
-        self.world.reset_view()
+        self.world.reset_zoom()
 
-    def reset_view(self):
-        self.world.reset_view()
+    def reset_zoom(self, onload=False):
+        self.world.reset_zoom(onload)
+
+    def reset_view_orientation(self):
+        self.world.reset_view_orientation()
 
     def resize_ev(self, k):
         self.model_name_widget.update_pos(k)

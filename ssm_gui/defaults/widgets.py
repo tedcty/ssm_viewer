@@ -187,7 +187,7 @@ class MeshInfoWidget(QWidget):
         self.actor_name = elements[-1][:elements[-1].rindex(".")]
         self.the_label.setText(self.actor_name)
         self.root.root.world.add_actor(self.actor_name, self.actor)
-        self.root.root.world.reset_view()
+        self.root.root.world.reset_zoom(on_load=True)
         pass
 
     def refresh(self):

@@ -108,7 +108,7 @@ class SSMConfig(CustomConfig):
     def update_model_connector(self):
         self.model_connector.shape_model = self.shape_model
         self.model_connector.mean_mesh_file = self.geo
-        self.model_connector.update_world()
+        self.model_connector.update_world(True)
 
     def save(self):
         try:
@@ -150,6 +150,7 @@ class SSMConfig(CustomConfig):
             file_paths = JSONSUtl.load_json(self.current_file)
             if os.path.exists(file_paths['pc']) and os.path.exists(file_paths['mean_mesh']):
                 self.root.par.qw.clear_view()
+                self.root.par.qw.world.reset_view()
                 self.new_project_window = NewSSM(self)
                 self.new_project_window.current_pc_file = file_paths['pc']
                 self.new_project_window.current_mean_file = file_paths['mean_mesh']
@@ -173,13 +174,13 @@ class ModelConnector:
         self.mean_mesh_poly = None
         self.model_name = None
 
-    def update_world(self):
+    def update_world(self, onload = False):
         model_path = os.path.split(self.mean_mesh_file)
         self.model_name = model_path[1][: model_path[1].rindex('.')]
         self.mean_mesh_actor = self.qw.world.add_actor(filename=self.mean_mesh_file)
         self.mean_mesh_poly = self.mean_mesh_actor.GetMapper().GetInput()
         self.qw.refresh_model_name(self.model_name)
-        self.qw.reset_view()
+        self.qw.reset_zoom(onload)
 
     def update_actor(self, points):
         self.mean_mesh_poly = VTKMeshUtl.update_poly_w_points(points, self.mean_mesh_poly)
@@ -252,6 +253,10 @@ class MainMenuBar(QMenuBar):
         view3.triggered.connect(self.reset_view)
         view3.setIcon(QIcon('./icons/zoom_reset.png'))
 
+        view4 = action_view.addAction("Reset Orientation")
+        view4.triggered.connect(self.reset_view_orientation)
+        view4.setIcon(QIcon('./icons/refresh.png'))
+
         action_help = self.addMenu("Help")
         about = action_help.addAction("About")
         about.setIcon(QIcon('./icons/info.png'))
@@ -261,7 +266,10 @@ class MainMenuBar(QMenuBar):
         pass
 
     def reset_view(self):
-        self.par.par.qw.reset_view()
+        self.par.par.qw.reset_zoom()
+
+    def reset_view_orientation(self):
+        self.par.par.qw.reset_view_orientation()
 
     def toggle_origin(self):
         v = self.par.par.qw.world.actors['Origin'].GetVisibility()
@@ -317,10 +325,10 @@ class O3dHelperApp(QMainWindow):
 
     def start_world(self):
         time.sleep(0.5)
-        print("start_world")
+        print("Connect menubar to view")
         self.main_widget.menu_bar.set_view(self.qw)
-        print("start_world")
-        self.qw.reset_view()
+        print("Reset Camera View")
+        self.qw.reset_zoom()
         print("start_world")
         self.update()
 
