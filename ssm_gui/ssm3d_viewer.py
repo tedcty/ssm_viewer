@@ -244,9 +244,14 @@ class MainMenuBar(QMenuBar):
         self.preferences = action_edit.addAction("Preferences")
         self.preferences.setIcon(QIcon('./icons/slider.png'))
         action_view = self.addMenu("View")
+        view2 = action_view.addAction("Toggle Origin")
+        view2.triggered.connect(self.toggle_origin)
+        view2.setIcon(QIcon('./icons/model-cube-arrows.png'))
+
         view3 = action_view.addAction("Reset Zoom")
         view3.triggered.connect(self.reset_view)
         view3.setIcon(QIcon('./icons/zoom_reset.png'))
+
         action_help = self.addMenu("Help")
         about = action_help.addAction("About")
         about.setIcon(QIcon('./icons/info.png'))
@@ -257,6 +262,12 @@ class MainMenuBar(QMenuBar):
 
     def reset_view(self):
         self.par.par.qw.reset_view()
+
+    def toggle_origin(self):
+        v = self.par.par.qw.world.actors['Origin'].GetVisibility()
+        self.par.par.qw.world.actors['Origin'].SetVisibility(not v)
+        self.par.par.qw.world.update_view()
+        pass
 
     def open_splash(self):
         if self.splash is not None:

@@ -300,13 +300,41 @@ class SSMInfoWidget(QWidget):
 
         self.vlayout.addWidget(self.scroll)
         #self.vlayout.addStretch(5)
+        self.export_button = QPushButton("Export")
+        self.export_button.setFixedHeight(35)
+        self.export_button.clicked.connect(self.export)
         self.reset_button = QPushButton("Reset")
         self.reset_button.setFixedHeight(35)
         self.reset_button.clicked.connect(self.reset)
+        self.vlayout.addWidget(self.export_button)
         self.vlayout.addWidget(self.reset_button)
         self.setLayout(self.vlayout)
         self.setFixedWidth(320)
         self.sd = [0 for i in range(0, self.number_pc)]
+
+    def export(self):
+        op = OpenFiles()
+        save = op.get_save_file(file_filter=("ply (*.ply);;stl (*.stl);;FEBio/ Abaqus (*.inp);;All Files (*.*)"))
+        filt = op.selectedNameFilter()
+        if 'ply' in filt:
+            if not save.endswith('.ply'):
+                save += '.ply'
+        elif 'stl' in filt:
+            if not save.endswith('.stl'):
+                save += '.stl'
+        elif 'inp' in filt:
+            if not save.endswith('.inp'):
+                save += '.inp'
+        else:
+            print("Unknown file format")
+
+        try:
+            k = self.model.qw.world.actors[self.model.model_name]
+        except KeyError:
+            print("Unknown model")
+            pass
+
+        pass
 
     def reset_number_pc(self, n):
         print("Number of PCs")
