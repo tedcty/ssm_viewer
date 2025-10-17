@@ -52,3 +52,31 @@ QLabel {
     font: bold 14px;
     padding-left: 5px;
 }
+
+QCheckBox {
+    spacing: 5px; /* Space between indicator and text */
+    color: "#fffaeb";
+    font-size: bold 14px;
+}
+
+QCheckBox::indicator {
+    width: 10px;
+    height: 10px;
+    border: 2px solid #555;
+    border-radius: 4px;
+    background-color: #eee;
+}
+
+QCheckBox::indicator:hover {
+    border-color: #007bff;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}

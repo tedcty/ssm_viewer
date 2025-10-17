@@ -1,6 +1,6 @@
 import os
 
-from PySide6.QtWidgets import (QLabel, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QPushButton)
+from PySide6.QtWidgets import (QLabel, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QPushButton, QColorDialog, QCheckBox)
 from PySide6.QtGui import QIcon
 from ptb.util.io.opendialog import OpenFiles
 from ptb.util.io.helper import BasicIO
@@ -18,6 +18,49 @@ class Preference(QWidget):
         self.setFixedHeight(600)
         self.setWindowTitle("Preferences")
         self.setStyleSheet(BasicIO.read_as_block("./defaults/dialog.qss"))
+
+        self.mean_mesh_label = QLabel("Mean Mesh")
+
+        self.mesh_name = QLineEdit("Mesh Name")
+        self.mesh_name.setObjectName('text_box')
+        self.color_button = QPushButton('', self)
+        self.color_button.setIcon(QIcon("icons/palette.png"))
+        self.color_button.clicked.connect(self.choose_color)
+
+        line1 = QWidget()
+        hv = QHBoxLayout()
+        hv.addWidget(self.mesh_name)
+        hv.addWidget(self.color_button)
+        line1.setLayout(hv)
+
+        self.show_mesh = QCheckBox("Show Mean Mesh")
+        self.show_mesh.setChecked(False)  # Initial state: unchecked
+        self.show_mesh.stateChanged.connect(self.on_checkbox_state_changed)
+        line2 = QWidget()
+        hv = QHBoxLayout()
+        hv.addWidget(self.show_mesh)
+        line2.setLayout(hv)
+
+        self.ssm_mesh_label = QLabel("SSM")
+
+        layout.addWidget(self.mean_mesh_label)
+        layout.addWidget(line1)
+        layout.addWidget(line2)
+        layout.addWidget(self.ssm_mesh_label)
+        layout.addStretch(5)
+        self.setLayout(layout)
+
+    def on_checkbox_state_changed(self):
+        pass
+
+    def choose_color(self):
+        cl = QColorDialog()
+        color = cl.getColor()
+        if color.isValid():
+            colour = color.getRgb()
+            r = colour[0] / 256.0
+            g = colour[1] / 256.0
+            b = colour[2] / 256.0
 
 
 class NewSSM(QWidget):

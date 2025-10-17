@@ -11,7 +11,7 @@ from PySide6.QtCore import QSize, Qt
 from ssm_gui.defaults.viewer import WorldView
 from ssm_gui.defaults.widgets import SSMInfoWidget, CameraWidget
 from ssm_gui.defaults.tools import BasicIO
-from ssm_gui.util.dialogs import NewSSM
+from ssm_gui.util.dialogs import NewSSM, Preference
 from ssm_gui.models.shape import ShapeModel
 
 from ptb.util.io.helper import JSONSUtl
@@ -209,6 +209,7 @@ class MainMenuBar(QMenuBar):
         self.splash = splash
         self.new_project = None
         self.preferences = None
+        self.preferences_window = None
 
         self.view3d = False
         if default_menus:
@@ -245,6 +246,7 @@ class MainMenuBar(QMenuBar):
         action_edit = self.addMenu("Edit")
         self.preferences = action_edit.addAction("Preferences")
         self.preferences.setIcon(QIcon('./icons/slider.png'))
+        self.preferences.triggered.connect(self.preference_dialog)
         action_view = self.addMenu("View")
         view2 = action_view.addAction("Toggle Origin")
         view2.triggered.connect(self.toggle_origin)
@@ -277,6 +279,17 @@ class MainMenuBar(QMenuBar):
         self.par.par.qw.world.actors['Origin'].SetVisibility(not v)
         self.par.par.qw.world.update_view()
         pass
+
+    def preference_dialog(self):
+
+        if self.preferences_window is None:
+            self.preferences_window = Preference(self.par.par)
+            self.preferences_window.show()
+        elif self.preferences_window.isVisible():
+            self.preferences_window.activateWindow()
+            return
+        else:
+            self.preferences_window.show()
 
     def open_splash(self):
         if self.splash is not None:
