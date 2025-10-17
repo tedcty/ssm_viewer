@@ -1252,9 +1252,9 @@ class HoverLabel(QWidget):
     def setText(self, txt):
         self.labe.setText(txt)
         sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
-        w = int(sizing.width())
+        w = int(np.round(sizing.width(),0))
         w = int(np.round(1.5*w, 0))
-        h = int(sizing.height())
+        h = int(np.round(sizing.height(), 0))
 
         self.setMinimumWidth(w)
         self.setMinimumHeight(h)
@@ -1285,8 +1285,8 @@ class HoverLabel(QWidget):
         )
 
         sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
-        w = int(sizing.width()+k.width()/2.0)
-        h = int(sizing.height()+k.height())
+        w = int(np.round(sizing.width()+k.width()/2.0, 0))
+        h = int(np.round(sizing.height()+k.height(), 0))
 
         self.setFixedWidth(w)
         self.setFixedHeight(h)
@@ -1294,7 +1294,7 @@ class HoverLabel(QWidget):
         self.vl = QHBoxLayout()
         self.vl.addWidget(self.labe)
         self.setLayout(self.vl)
-        self.button_loc4 = QPoint(int((self.listener.app_win.width / 2.0)-w/2.0 - 0.1*w), 0)
+        self.button_loc4 = QPoint(int(np.round((self.listener.app_win.width / 2.0)-w/2.0 - 0.1*w, 0)), 0)
         self.move(self.button_loc4)
         self.setMask(self.make_mask())
         self.setVisible(True)
@@ -1303,7 +1303,7 @@ class HoverLabel(QWidget):
         sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
         k = self.size()
         w = int(np.round((sizing.width() + k.width() / 2.0 + 0.15*k.width() + 320), 0))
-        h = int(sizing.height() + k.height())
+        h = int(np.round(sizing.height() + k.height(), 0))
 
         print(app_k.width() / 2)
         w0 = np.round((app_k.width() / 2.0) - (w / 2.0), 0 ) + 20

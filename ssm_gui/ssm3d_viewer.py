@@ -3,6 +3,7 @@ import os
 from typing import Optional
 import time
 
+import numpy as np
 from PySide6.QtWidgets import (QMainWindow, QApplication, QMenuBar, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox)
 from PySide6.QtGui import QIcon, QColor
 from PySide6.QtCore import QSize, Qt
@@ -118,7 +119,7 @@ class SSMConfig(CustomConfig):
             print("nothing to save")
             return
         op = OpenFiles()
-        # save = op.get_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
+
         save = op.get_save_file(file_filter=("SSM (*.ssm);;All Files (*.*)"))
         if save is not None:
             if not save.endswith('.ssm'):
@@ -292,17 +293,17 @@ class O3dHelperApp(QMainWindow):
         self.title = 'SSM Viewer'
         self.splash = splash
         size: QSize = screen.size()
-        self.width = int(0.8 * size.width())
-        self.height = int(0.8 * size.height())
-        self.left = int((size.width()-self.width)/2)
-        self.top = int((size.height()-self.height)/2)
+        self.width = int(np.round(0.8 * size.width(), 0))
+        self.height = int(np.round(0.8 * size.height(), 0))
+        self.left = int(np.round((size.width()-self.width)/2.0, 0))
+        self.top = int(np.round((size.height()-self.height)/2.0, 0))
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon('./icons/vector-alt.png'))
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         self.main_widget = MainWidget(self)
         self.main_widget.no_3d = [self.width, self.height]
-        self.main_widget.with_3d = [int(0.8 * size.width()), self.height]
+        self.main_widget.with_3d = [int(np.round(0.8 * size.width(), 0)), self.height]
         self.qw = WorldView(self.main_widget, self)
         self.model_connector = ModelConnector(self.qw)
         self.main_widget.menu_bar.set_model_connector(self.model_connector)

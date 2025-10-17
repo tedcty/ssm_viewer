@@ -461,12 +461,12 @@ class CameraWidget(QWidget):
     def __init__(self, parent, view):
         super().__init__(parent)
         self.view = view
-        self.setStyleSheet(BasicIO.read_as_block("./defaults/ssminfo.qss"))
+        self.setStyleSheet(BasicIO.read_as_block("./defaults/world_control.qss"))
         self.root = parent
         self.vlayout = QVBoxLayout()
         labe = QWidget()
         hv = QHBoxLayout()
-        pixmap = QPixmap('./icons/camera.png')
+        pixmap = QPixmap('./icons/globe-alt.png')
         scaled_pixmap = pixmap.scaled(
             35, 35, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation
         )
@@ -475,16 +475,26 @@ class CameraWidget(QWidget):
         hv.addWidget(label)
         labe.setLayout(hv)
         self.x = QPushButton('X')
+        self.x.setObjectName('x_button')
         self.x.clicked.connect(self.on_x_clicked)
         self.y = QPushButton('Y')
+        self.y.setObjectName('y_button')
         self.y.clicked.connect(self.on_y_clicked)
         self.z = QPushButton('Z')
+        self.z.setObjectName('z_button')
         self.z.clicked.connect(self.on_z_clicked)
+
+        self.snap_button = QPushButton('', self)
+        self.snap_button.setIcon(QIcon("./icons/camera.png"))
+        self.snap_button.setToolTip("Take a snapshot of the current view.")
+        self.snap_button.clicked.connect(self.snapshot)
+
         self.vlayout.addWidget(labe)
         self.vlayout.addSpacing(5)
         self.vlayout.addWidget(self.x)
         self.vlayout.addWidget(self.y)
         self.vlayout.addWidget(self.z)
+        self.vlayout.addWidget(self.snap_button)
         self.vlayout.addStretch(10)
         self.setLayout(self.vlayout)
 
@@ -496,3 +506,25 @@ class CameraWidget(QWidget):
 
     def on_z_clicked(self):
         self.view.world.to_z_view()
+
+    def snapshot(self):
+        w2if = vtk.vtkWindowToImageFilter()
+        w2if.SetInput(self.view.world.vtk_widget.GetRenderWindow())
+        w2if.SetInputBufferTypeToRGB()
+        w2if.ReadFrontBufferOff()
+        w2if.SetScale(2, 2)
+        w2if.Update()
+
+        op = OpenFiles()
+
+        save = op.get_save_file(file_filter=("snapshot (*.png);;All Files (*.*)"))
+        if save is not None:
+            if not save.endswith('.png'):
+                save = save + '.png'
+
+            writer = vtk.vtkPNGWriter()
+            writer.SetFileName(save)
+            writer.SetInputConnection(w2if.GetOutputPort())
+            writer.Write()
+        w2if.SetScale(1, 1)
+        w2if.Update()

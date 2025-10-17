@@ -1,0 +1,128 @@
+
+#PCSlider {
+    height: 50px;
+    border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    padding: 5px;
+    background-color: "#404040";
+}
+
+#box{
+    background-color: "#404040";
+    border-radius: 8px;
+}
+
+QScrollArea{
+border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    border-color: "#3B3838";
+    color: "#dbdbd9";
+    padding: 5px;
+    border-radius: 8px;
+}
+
+QPushButton {
+    background-color: "#3B3838"; /* sets background of the menu */
+    border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    border-color: "#3B3838";
+    color: "#dbdbd9";
+    padding: 5px;
+    border-radius: 8px;
+    min-height: 0.86em;
+    font: bold 14px;
+}
+
+
+QPushButton:hover { /* when user selects item using mouse or keyboard */
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+#x_button{
+    background-color: "#3B3838"; /* sets background of the menu */
+    border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    border-color: "#3B3838";
+    color: "#fa7c6e";
+    padding: 5px;
+    border-radius: 8px;
+    min-height: 0.86em;
+    font: bold 14px;
+}
+
+#x_button:hover {
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+#y_button{
+    background-color: "#3B3838"; /* sets background of the menu */
+    border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    border-color: "#3B3838";
+    color: "#81fa6e";
+    padding: 5px;
+    border-radius: 8px;
+    min-height: 0.86em;
+    font: bold 14px;
+}
+
+#y_button:hover {
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+#z_button{
+    background-color: "#3B3838"; /* sets background of the menu */
+    border: 0px;
+    border-width: 0px;
+    border-style: Transparent;
+    border-color: "#3B3838";
+    color: "#6e96fa";
+    padding: 5px;
+    border-radius: 8px;
+    min-height: 0.86em;
+    font: bold 14px;
+}
+
+#z_button:hover {
+    background-color: "#dbdbd9";
+    color: "#3B3838";
+}
+
+QToolTip {
+    background-color: #333333; /* Dark gray background */
+    color: white; /* White text color */
+    border: 1px solid #555555; /* Optional border */
+    padding: 5px; /* Optional padding */
+}
+
+
+QLineEdit{
+    color: "#f5f3eb";
+    background-color: "#505050";
+    font: bold 14px;
+}
+
+QLabel {
+    background-color: rgba(64, 64, 64, 0);
+    font: bold 14px;
+    color: "#dbdbd9";
+}
+
+#text_box {
+    background: #616161;
+    color: "#fffaeb";
+    border-top-left-radius: 5;
+    border-top-right-radius: 5;
+    border-bottom-left-radius: 5;
+    border-bottom-right-radius: 5;
+    font: bold 14px;
+    padding-left: 5px;
+}

@@ -45,3 +45,5 @@ src/util/__pycache__/
 .idea/
 ssm_gui/example/test.inp
 ssm_gui/example/test.ply
+ssm_gui/test.png
+ssm_gui/test.ssm
