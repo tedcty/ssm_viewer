@@ -237,6 +237,42 @@ class ProgressWidget(QWidget):
         self.hor.addWidget(self.pbar)
         self.setLayout(self.hor)
 
+class OpacitySlider(QWidget):
+    def __init__(self, root, label, listener):
+        super().__init__()
+        self.root = root
+        self.listener = listener
+        self.setObjectName("PCSlider")
+        self.label = label
+        self.the_label = QLabel('{0}: '.format(label))
+        self.slider = QSlider(Qt.Orientation.Horizontal, self)
+        self.slider.setRange(0, 100)
+        self.slider.setValue(0)
+        self.slider.valueChanged.connect(self.update_text_box)
+        self.text_box = QLineEdit('0.0')
+        self.text_box.setFixedWidth(40)
+        self.hor = QHBoxLayout()
+        self.hor.addWidget(self.the_label)
+        self.hor.addWidget(self.slider)
+        self.hor.addWidget(self.text_box)
+        self.setFixedHeight(35)
+        self.setLayout(self.hor)
+
+    def set_initial_value(self, i):
+        if i > 1:
+            return
+        self.slider.setValue(i*100)
+
+    def update_text_box(self):
+        print(self.slider.value())
+        sdx = self.slider.value()/100
+        self.text_box.setText("{0:0.2f}".format(sdx))
+        self.listener(sdx)
+
+    def reset(self):
+        self.text_box.setText("{0:0.2f}".format(0))
+        self.slider.setValue(0)
+
 
 class PCSlider(QWidget):
     def __init__(self, root, label):
@@ -246,7 +282,7 @@ class PCSlider(QWidget):
         self.label = label
         self.the_label = QLabel('{0}: '.format(label))
         self.slider = QSlider(Qt.Orientation.Horizontal, self)
-        self.slider.setRange(-100, 100)
+        self.slider.setRange(-200, 200)
         self.slider.setValue(0)
         self.slider.valueChanged.connect(self.update_text_box)
         self.text_box = QLineEdit('0.0')
@@ -261,9 +297,12 @@ class PCSlider(QWidget):
 
     def update_text_box(self):
         print(self.slider.value())
-        sdx = self.slider.value()/50.0
+        sdx = self.slider.value()/100.0
         self.text_box.setText("{0:0.2f}".format(sdx))
         self.root.update_pcs(self.label, sdx)
+
+    def update_range(self, i):
+        self.slider.setRange(-i*100, i*100)
 
     def reset(self):
         self.text_box.setText("{0:0.2f}".format(0))
@@ -429,6 +468,10 @@ class SSMInfoWidget(QWidget):
         self.box.update()
         self.update()
 
+    def update_pc_sd_range(self, i):
+        for pc_label in self.pc_control:
+            self.pc_control[pc_label].update_range(i)
+
     def reset(self):
         print("Reset")
         try:
@@ -446,8 +489,7 @@ class SSMInfoWidget(QWidget):
         # print("update pc")
         idx = int(pc_label.split(' ')[1])-1
         self.sd[idx] = sdx
-        # print(idx)
-        # print(self.sd)
+        print(self.sd)
         try:
             m = self.model.shape_model.reconstruct_diff_all(self.sd, True)
             self.model.update_actor(m)

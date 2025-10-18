@@ -166,6 +166,21 @@ class World:
             self.actors.pop(a)
         self.vtk_widget.update()
 
+    def copy_actor(self, actor):
+        poly = actor.GetMapper().GetInput()
+        poly_copy = vtk.vtkPolyData()
+        poly_copy.DeepCopy(poly)
+        mapper = vtk.vtkPolyDataMapper()
+        if vtk.VTK_MAJOR_VERSION <= 5:
+            mapper.SetInput(poly_copy)
+        else:
+            mapper.SetInputData(poly_copy)
+
+        new_actor = vtk.vtkActor()
+        new_actor.SetMapper(mapper)
+        new_actor.GetProperty().SetColor(242 / 255.0, 238 / 255.0, 220 / 255.0)
+        return new_actor
+
 
     def add_actor(self, actor_name: str = None, actor: vtk.vtkActor = None, filename: str = None):
         if actor_name is not None and actor is not None:
