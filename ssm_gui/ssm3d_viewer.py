@@ -1,3 +1,4 @@
+import copy
 import sys
 import os
 from typing import Optional
@@ -172,20 +173,24 @@ class ModelConnector:
         self.mean_mesh_file = None
         self.qw:WorldView = qw
         self.mean_mesh_actor = None
+        self.static_mean_actor = None
         self.mean_mesh_poly = None
         self.model_name = None
+
 
     def update_world(self, onload = False):
         model_path = os.path.split(self.mean_mesh_file)
         self.model_name = model_path[1][: model_path[1].rindex('.')]
         self.mean_mesh_actor = self.qw.world.add_actor(filename=self.mean_mesh_file)
+        self.static_mean_actor = self.qw.world.copy_actor(self.mean_mesh_actor)
+        self.static_mean_actor.SetVisibility(False)
+        self.qw.world.add_actor(actor_name="static_mean", actor=self.static_mean_actor)
         self.mean_mesh_poly = self.mean_mesh_actor.GetMapper().GetInput()
         self.qw.refresh_model_name(self.model_name)
         self.qw.reset_zoom(onload)
 
     def update_actor(self, points):
         self.mean_mesh_poly = VTKMeshUtl.update_poly_w_points(points, self.mean_mesh_poly)
-        p = VTKMeshUtl.extract_points(self.mean_mesh_actor)
         self.qw.world.update_view()
 
 class MainMenuBar(QMenuBar):
@@ -289,6 +294,7 @@ class MainMenuBar(QMenuBar):
             self.preferences_window.activateWindow()
             return
         else:
+            self.preferences_window.update_connections()
             self.preferences_window.show()
 
     def open_splash(self):
@@ -325,8 +331,8 @@ class O3dHelperApp(QMainWindow):
 
         q = QWidget()
         l = QHBoxLayout()
-        l.addWidget(self.qw)
         l.addWidget(self.camera_widget)
+        l.addWidget(self.qw)
         l.addWidget(self.ssm_panel)
         q.setLayout(l)
 
