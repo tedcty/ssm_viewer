@@ -45,7 +45,22 @@ class Preference(QWidget):
         self.view = self.root.qw
         self.ssm = self.root.ssm_panel
         self.mesh_name.setText(self.ssm.model.model_name)
+        self.old_name = self.ssm.model.model_name
         self.pc_sd_text_box.setCurrentIndex(1)
+        self.update()
+
+    def reset(self):
+        self.view = self.root.qw
+        self.ssm = self.root.ssm_panel
+        self.mesh_name.setText(self.old_name)
+        self.mean_color = [242, 238, 220]
+        self.current_colour = [242, 238, 220]
+        self.color_button.setStyleSheet(Preference.button_background(self.mean_color))
+        self.color_button_current.setStyleSheet(Preference.button_background(self.current_colour))
+        self.opacity_mean.set_initial_value(1)
+        self.opacity_current.set_initial_value(1)
+        self.pc_sd_text_box.setCurrentIndex(1)
+        self.show_mesh.setChecked(False)
         self.update()
 
     @staticmethod
@@ -79,9 +94,10 @@ class Preference(QWidget):
         self.root = root
         self.view = self.root.qw
         self.ssm = self.root.ssm_panel
+        self.old_name = self.ssm.model.model_name
         layout = QVBoxLayout()
-        self.setFixedWidth(500)
-        self.setFixedHeight(600)
+        self.setFixedWidth(450)
+        self.setFixedHeight(500)
         self.setWindowTitle("Preferences")
         self.setStyleSheet(BasicIO.read_as_block("./defaults/dialog.qss"))
         self.mean_color = [242, 238, 220]
@@ -158,8 +174,9 @@ class Preference(QWidget):
         line6 = QWidget()
         hv = QHBoxLayout()
         self.reset_button = QPushButton('Reset', self)
-        hv.addStretch()
+        self.reset_button.clicked.connect(self.reset)
         hv.addWidget(self.reset_button)
+        hv.addStretch()
         line6.setLayout(hv)
 
         layout.addWidget(self.mean_mesh_label)

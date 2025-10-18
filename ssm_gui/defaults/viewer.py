@@ -76,6 +76,7 @@ class World:
         self.origin = vtk.vtkAxesActor()
         self.origin.SetTotalLength(50, 50, 50)
         self.origin.SetNormalizedTipLength(0.2, 0.2, 0.2)
+        self.origin.SetVisibility(False)
         self.add_actor(actor_name='Origin', actor=self.origin)
 
         self.style_interactor = vtk.vtkInteractorStyleTrackballCamera()
@@ -84,13 +85,20 @@ class World:
         self.vtk_widget.Initialize()
         self.vtk_widget.Start()
         camera = self.ren.GetActiveCamera()
-        self.camera_orientation = {}
-        self.camera_orientation['position'] = camera.GetPosition()
-        self.camera_orientation['focal point'] = camera.GetFocalPoint()
-        self.camera_orientation['view up'] = (0, 1, 0)
-        self.camera_orientation['distance'] = camera.GetDistance()
-        self.camera_orientation['clipping range'] = camera.GetClippingRange()
-        self.camera_orientation['orientation'] = camera.GetOrientation()
+        self.camera_orientation = {
+            'position': camera.GetPosition(),
+            'focal point': camera.GetFocalPoint(),
+            'view up': (0, 1, 0),
+            'distance': camera.GetDistance(),
+            'clipping range': camera.GetClippingRange(),
+            'orientation': camera.GetOrientation()
+        }
+        # self.camera_orientation['position'] = camera.GetPosition()
+        # self.camera_orientation['focal point'] = camera.GetFocalPoint()
+        # self.camera_orientation['view up'] = (0, 1, 0)
+        # self.camera_orientation['distance'] = camera.GetDistance()
+        # self.camera_orientation['clipping range'] = camera.GetClippingRange()
+        # self.camera_orientation['orientation'] = camera.GetOrientation()
         pass
 
     def update_view(self):
@@ -114,28 +122,28 @@ class World:
         self.vtk_widget.update()
         self.vtk_widget.focusWidget()
 
-    def to_x_view(self):
+    def to_x_view(self, i=1):
         camera = self.ren.GetActiveCamera()
         camera.SetPosition(self.camera_orientation['position'])
-        camera.SetViewUp((1, 0, 0))
+        camera.SetViewUp((i, 0, 0))
         self.ren.ResetCamera()
         self.vtk_widget.update()
         self.vtk_widget.focusWidget()
 
-    def to_y_view(self):
+    def to_y_view(self, i=1):
         camera = self.ren.GetActiveCamera()
         camera.SetPosition(self.camera_orientation['position'])
-        camera.SetViewUp((0, 1, 0))
+        camera.SetViewUp((0, i, 0))
         self.ren.ResetCamera()
         self.vtk_widget.update()
         self.vtk_widget.focusWidget()
 
-    def to_z_view(self):
+    def to_z_view(self, i=1):
         camera = self.ren.GetActiveCamera()
         camera.SetPosition(self.camera_orientation['position'])
         camera.SetViewUp((0, 1, 0))
         camera.Azimuth(90)
-        camera.SetViewUp((0, 0, 1))
+        camera.SetViewUp((0, 0, i))
         self.ren.ResetCamera()
         self.vtk_widget.update()
         self.vtk_widget.focusWidget()

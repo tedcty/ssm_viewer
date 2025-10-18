@@ -526,6 +526,18 @@ class CameraWidget(QWidget):
         self.z.setObjectName('z_button')
         self.z.clicked.connect(self.on_z_clicked)
 
+        self.x_neg = QPushButton('-X')
+        self.x_neg.setObjectName('x_button')
+        self.x_neg.clicked.connect(self.on_x_neg_clicked)
+
+        self.y_neg = QPushButton('-Y')
+        self.y_neg.setObjectName('y_button')
+        self.y_neg.clicked.connect(self.on_y_neg_clicked)
+
+        self.z_neg = QPushButton('-Z')
+        self.z_neg.setObjectName('z_button')
+        self.z_neg.clicked.connect(self.on_z_neg_clicked)
+
         self.snap_button = QPushButton('', self)
         self.snap_button.setIcon(QIcon("./icons/camera.png"))
         self.snap_button.setToolTip("Take a snapshot of the current view.")
@@ -536,6 +548,11 @@ class CameraWidget(QWidget):
         self.vlayout.addWidget(self.x)
         self.vlayout.addWidget(self.y)
         self.vlayout.addWidget(self.z)
+        self.vlayout.addSpacing(15)
+        self.vlayout.addWidget(self.x_neg)
+        self.vlayout.addWidget(self.y_neg)
+        self.vlayout.addWidget(self.z_neg)
+        self.vlayout.addSpacing(15)
         self.vlayout.addWidget(self.snap_button)
         self.vlayout.addStretch(10)
         self.setLayout(self.vlayout)
@@ -543,11 +560,20 @@ class CameraWidget(QWidget):
     def on_x_clicked(self):
         self.view.world.to_x_view()
 
+    def on_x_neg_clicked(self):
+        self.view.world.to_x_view(-1)
+
     def on_y_clicked(self):
         self.view.world.to_y_view()
 
+    def on_y_neg_clicked(self):
+        self.view.world.to_y_view(-1)
+
     def on_z_clicked(self):
         self.view.world.to_z_view()
+
+    def on_z_neg_clicked(self):
+        self.view.world.to_z_view(-1)
 
     def snapshot(self):
         w2if = vtk.vtkWindowToImageFilter()
