@@ -310,6 +310,14 @@ class MainMenuBar(QMenuBar):
 class O3dHelperApp(QMainWindow):
     def closeEvent(self, event):
         self.qw.on_close()
+        try:
+            self.main_widget.menu_bar.config_me.new_project_window.close()
+        except AttributeError:
+            pass
+        try:
+            self.main_widget.menu_bar.preferences_window.close()
+        except AttributeError:
+            pass
 
     def __init__(self, screen, splash=None):
         super().__init__()

@@ -57,10 +57,26 @@ class Preference(QWidget):
         self.current_colour = [242, 238, 220]
         self.color_button.setStyleSheet(Preference.button_background(self.mean_color))
         self.color_button_current.setStyleSheet(Preference.button_background(self.current_colour))
+
         self.opacity_mean.set_initial_value(1)
         self.opacity_current.set_initial_value(1)
         self.pc_sd_text_box.setCurrentIndex(1)
         self.show_mesh.setChecked(False)
+
+        try:
+            actor = self.view.world.actors["static_mean"]
+            actor.GetProperty().SetColor(242 / 255.0, 238 / 255.0, 220 / 255.0)
+            self.view.world.update_view()
+        except KeyError:
+            pass
+
+        try:
+            actor = self.view.world.actors[self.ssm.model.model_name]
+            actor.GetProperty().SetColor(242 / 255.0, 238 / 255.0, 220 / 255.0)
+
+            self.view.world.update_view()
+        except KeyError:
+            pass
         self.update()
 
     @staticmethod
