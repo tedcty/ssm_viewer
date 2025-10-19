@@ -19,3 +19,17 @@ This viewer can be built using pyinstaller using the provided ssm3d_viewer.spec 
 
 # Build issue
 * N/A for beta build 0.1.1
+
+# License Information
+
+This software is dual-licensed:
+
+1. Open Source License (Apache License 2.0)
+   You may use, modify, and distribute this software under the terms of the Apache License 2.0, for non-commercial purposes such as research, education, or internal experimentation.
+
+2. Commercial License
+   For any commercial use — including use in products, services, or production systems — you must obtain a commercial license from the copyright holder.
+
+To inquire about commercial licensing, please contact:
+University of Auckland
+ip@auckland.ac.nz
