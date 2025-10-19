@@ -596,3 +596,4 @@ class CameraWidget(QWidget):
             writer.Write()
         w2if.SetScale(1, 1)
         w2if.Update()
+        #self.view.world.update_view()
