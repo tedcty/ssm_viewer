@@ -10,4 +10,4 @@ Due to the difficulties in getting Mayavi Visualiser to run with GIAS3, a new, s
 This viewer can be built using pyinstaller using the provided ssm3d_viewer.spec file
 
 # Build issue
-* Currently, pymeshlab has build issues with pyinstaller, which causes warnings on program start, but these can be ignored as the visualiser does not use pymeshlab at the moment. 
+* N/A for beta build 0.1.1
