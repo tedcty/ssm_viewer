@@ -4,7 +4,10 @@ Due to the difficulties in getting Mayavi Visualiser to run with GIAS3 and newer
 ![ssm viewer beta 0.1.0](https://github.com/tedcty/mmg-doco/blob/main/Resources/Images/Screenshot%202025-10-20%20093206(ssm_viewer_beta_0.1.0).png)
 
 # Releases
-The current beta build release can be found here: ![Releases](https://github.com/tedcty/ssm_viewer/releases)
+The current beta build:
+![SSM Viewer v0.1.1 beta](https://github.com/tedcty/ssm_viewer/releases/tag/v0.1.1-beta) 
+
+Other release can be found here: ![Releases](https://github.com/tedcty/ssm_viewer/releases)
 
 # Requirements
 * Windows 11
