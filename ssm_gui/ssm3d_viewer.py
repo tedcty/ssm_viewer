@@ -199,6 +199,8 @@ class ModelConnector:
         self.qw.reset_zoom(onload)
 
     def update_actor(self, points):
+        p = VTKMeshUtl.extract_points(self.mean_mesh_poly)
+        q = VTKMeshUtl.extract_points(self.static_mean_actor)
         self.mean_mesh_poly = VTKMeshUtl.update_poly_w_points(points, self.mean_mesh_poly)
         self.qw.world.update_view()
 

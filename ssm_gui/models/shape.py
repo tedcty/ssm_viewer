@@ -32,6 +32,7 @@ class ShapeModel:
 
     def reconstruct_diff_all(self, sd, add_mean=False):
         w = np.atleast_2d(sd * np.sqrt(self.weights))
+        self.projectedWeights
         m = np.dot(w, self.modes.T)
         me = m.T
         if add_mean:

@@ -199,7 +199,7 @@ class World:
             if len(path_elements) == 1:
                 path_elements = filename.split("/")
 
-            polydata = VTKMeshUtl.load(filename)
+            polydata = VTKMeshUtl.load(filename, clean_mesh=False)
             mapper = vtk.vtkPolyDataMapper()
             if vtk.VTK_MAJOR_VERSION <= 5:
                 mapper.SetInput(polydata)

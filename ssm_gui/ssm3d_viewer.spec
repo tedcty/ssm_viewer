@@ -5,7 +5,7 @@ a = Analysis(
     ['ssm3d_viewer.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('icons/*', 'icons'), ('defaults/*.qss', 'defaults')],
     hiddenimports=[
     'numpy.core.multiarray',
     'vtkmodules',
@@ -20,7 +20,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['PyQt6'],
     noarchive=False,
     optimize=0,
 )
