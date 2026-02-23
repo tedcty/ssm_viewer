@@ -1,7 +1,7 @@
 import sys
 import os
 
-__version__ = "0.3.2"
+__version__ = "1.0.0"
 __dev_state__ = 'beta'
 __build_date__= "23.02.2026"
 

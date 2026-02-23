@@ -372,6 +372,30 @@ class O3dHelperApp(QMainWindow):
         print("start_world")
         self.update()
 
+        # Check for updates in the background
+        from ssm_gui.util.update_checker import UpdateCheckerThread
+        from ssm_gui.__init__ import __version__
+        self.update_thread = UpdateCheckerThread(__version__, "tedcty", "ssm_viewer")
+        self.update_thread.update_available.connect(self.show_update_dialog)
+        self.update_thread.start()
+
+    def show_update_dialog(self, new_version, url):
+        from PySide6.QtWidgets import QMessageBox
+        from PySide6.QtGui import QDesktopServices
+        from PySide6.QtCore import QUrl
+        
+        msg = QMessageBox(self)
+        msg.setWindowTitle("Update Available")
+        msg.setText(f"A new version of SSM Viewer ({new_version}) is available!\n\nWould you like to download it now?")
+        msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        msg.setDefaultButton(QMessageBox.StandardButton.Yes)
+        
+        # Increase button size
+        msg.setStyleSheet("QPushButton { min-width: 100px; min-height: 35px; font-size: 14px; }")
+
+        if msg.exec() == QMessageBox.StandardButton.Yes:
+            QDesktopServices.openUrl(QUrl(url))
+
     def resizeEvent(self, event):
         self.qw.resize_ev(self.size())
         print("size")
