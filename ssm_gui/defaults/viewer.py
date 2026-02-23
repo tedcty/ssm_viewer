@@ -2,8 +2,8 @@ import vtk
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton)
-from PySide6.QtGui import QIcon, QPainterPath, QPainter, QPixmap
-from PySide6.QtCore import QPoint, Qt
+from PySide6.QtGui import QIcon, QPainterPath, QPainter, QPixmap, QColor, QFont, QFontMetrics, QRegion
+from PySide6.QtCore import QPoint, Qt, QRectF, QEvent, QTimer
 
 from ptb.util.io.helper import BasicIO
 from ptb.util.io.opendialog import OpenFiles
@@ -1270,86 +1270,108 @@ class HoverLabel(QWidget):
         return self.listener.world
 
     def text(self):
-        return self.labe.text()
+        return self._text
 
     def setText(self, txt):
-        self.labe.setText(txt)
-        sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
-        w = int(np.round(sizing.width(),0))
-        w = int(np.round(1.5*w, 0))
-        h = int(np.round(sizing.height(), 0))
-
-        self.setMinimumWidth(w)
-        self.setMinimumHeight(h)
-        #self.button_loc4 = QPoint(int((self.listener.app_win.width / 2.0) - 1.5 * w), 0)
-        self.button_loc4 = QPoint(-10, 0)
-        self.move(self.button_loc4)
-        self.setMask(self.make_mask())
+        self._text = txt
+        self._recalc_size()
+        self.move(QPoint(0, 0))
         self.update()
 
     def get_size(self):
-        return self.labe.fontMetrics().boundingRect(self.labe.text())
+        fm = QFontMetrics(self._font)
+        return fm.boundingRect(self._text)
 
     def __init__(self, parent, listener, text):
         super().__init__(parent)
         self.root = parent
         self.listener = listener
-        self.labe = QLabel(self)
-        self.labe.setText(text)
-        self.setObjectName("model_name123")
-        k = self.size()
+        self.setObjectName("modelnamewidget")
+        self._text = text if text else ""
+        self._bg_color = QColor(0x3d, 0x3d, 0x3b)
+        self._text_color = QColor(0xdb, 0xdb, 0xd9)
+        self._radius = 10
 
-        s = self.labe.font()
-        s.setPointSize(18)
-        s.setBold(True)
-        self.labe.setFont(s)
-        self.labe.setAlignment(
-            Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter
-        )
+        self._font = QFont()
+        self._font.setPointSize(16)
+        self._font.setBold(True)
 
-        sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
-        w = int(np.round(sizing.width()+k.width()/2.0, 0))
-        h = int(np.round(sizing.height()+k.height(), 0))
+        self._padding_h = 25
+        self._padding_v = 10
 
-        self.setFixedWidth(w)
-        self.setFixedHeight(h)
-
-        self.vl = QHBoxLayout()
-        self.vl.addWidget(self.labe)
-        self.setLayout(self.vl)
-        self.button_loc4 = QPoint(int(np.round((self.listener.app_win.width / 2.0)-w/2.0 - 0.1*w, 0)), 0)
-        self.move(self.button_loc4)
-        self.setMask(self.make_mask())
+        self._recalc_size()
+        self.move(QPoint(0, 0))
         self.setVisible(True)
 
-    def update_pos(self, app_k):
-        sizing = self.labe.fontMetrics().boundingRect(self.labe.text().strip())
-        k = self.size()
-        w = int(np.round((sizing.width() + k.width() / 2.0 + 0.15*k.width() + 320), 0))
-        h = int(np.round(sizing.height() + k.height(), 0))
+    def _recalc_size(self):
+        fm = QFontMetrics(self._font)
+        text_rect = fm.boundingRect(self._text.strip() if self._text else "")
+        w = text_rect.width() + 2 * self._padding_h
+        h = text_rect.height() + 2 * self._padding_v
+        self.setFixedSize(max(w, 1), max(h, 1))
+        self._update_mask()
 
-        print(app_k.width() / 2)
-        w0 = np.round((app_k.width() / 2.0) - (w / 2.0), 0 ) + 20
-        self.button_loc4 = QPoint(-10, 0)
-        #self.button_loc4 = QPoint(int(w0), 0)
-        self.move(self.button_loc4)
-        self.setMask(self.make_mask())
-        self.update()
-
-    def make_mask(self):
-        # Create a QPixmap with the same size as the window, filled with a transparent color
-        mask = QPixmap(self.size())
-        mask.fill(Qt.GlobalColor.transparent)
-
-        # Create a QPainter to draw onto the QPixmap
-        painter = QPainter(mask)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    def _build_path(self):
+        """Build a QPainterPath with only the bottom-right corner rounded."""
         path = QPainterPath()
-        rect_butt = self.rect()
-        radius = 10
-        rect_butt.setRect(10, 0, rect_butt.width()-20, rect_butt.height()-10)
-        path.addRoundedRect(rect_butt, radius, radius)  # radius of the corners
-        painter.fillPath(path, Qt.GlobalColor.white)
-        painter.end()
-        return mask.createMaskFromColor(Qt.GlobalColor.transparent)
+        r = self._radius
+        rect = QRectF(0, 0, self.width(), self.height())
+        path.moveTo(rect.topLeft())
+        path.lineTo(rect.topRight())
+        path.lineTo(rect.right(), rect.bottom() - r)
+        path.arcTo(QRectF(rect.right() - 2 * r, rect.bottom() - 2 * r, 2 * r, 2 * r), 0, -90)
+        path.lineTo(rect.bottomLeft())
+        path.lineTo(rect.topLeft())
+        return path
 
+    def _update_mask(self):
+        """Apply a window-level mask so no pixels exist outside the rounded shape.
+        Use a slightly inset path (-1px) to crop into the painted area and hide edge artifacts."""
+        path = QPainterPath()
+        r = max(self._radius - 1, 0)
+        rect = QRectF(1, 1, self.width() - 2, self.height() - 2)
+        path.moveTo(rect.topLeft())
+        path.lineTo(rect.topRight())
+        path.lineTo(rect.right(), rect.bottom() - r)
+        path.arcTo(QRectF(rect.right() - 2 * r, rect.bottom() - 2 * r, 2 * r, 2 * r), 0, -90)
+        path.lineTo(rect.bottomLeft())
+        path.lineTo(rect.topLeft())
+        region = QRegion(path.toFillPolygon().toPolygon())
+        self.setMask(region)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        path = self._build_path()
+        painter.fillPath(path, self._bg_color)
+
+        # Draw text
+        rect = QRectF(0, 0, self.width(), self.height())
+        painter.setFont(self._font)
+        painter.setPen(self._text_color)
+        painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, self._text if self._text else "")
+        painter.end()
+
+    def resizeEvent(self, event):
+        """Recalculate mask when widget is resized."""
+        super().resizeEvent(event)
+        self._update_mask()
+
+    def event(self, e):
+        """Catch DPI changes when moving between screens with different scaling."""
+        if e.type() == QEvent.Type.DevicePixelRatioChange:
+            print("HoverLabel: DPI changed")
+            self.clearMask()
+            QTimer.singleShot(150, self._delayed_mask_refresh)
+        return super().event(e)
+
+    def _delayed_mask_refresh(self):
+        """Recalculate mask after Qt has finished applying new DPI."""
+        print("HoverLabel: delayed mask refresh")
+        self._update_mask()
+        self.repaint()
+
+    def update_pos(self, app_k):
+        self._recalc_size()
+        self.move(QPoint(0, 0))
+        self.update()

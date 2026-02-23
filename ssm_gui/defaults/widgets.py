@@ -323,13 +323,13 @@ class SSMInfoWidget(QWidget):
         self.pc_control = {}
         self.scroll = QScrollArea()
         self.scroll.setWidgetResizable(True)
-        self.scroll.setFixedWidth(300)
+        self.scroll.setFixedWidth(320)
         self.scroll.setMinimumHeight(550)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.box = QWidget()
         self.box.setObjectName('box')
-        self.box.setFixedWidth(300)
+        self.box.setFixedWidth(320)
         for i in range(0, self.number_pc):
             pc_label = 'PC {0}'.format(i+1)
             self.pc_control[pc_label] = PCSlider(self, pc_label)
@@ -349,7 +349,7 @@ class SSMInfoWidget(QWidget):
         self.vlayout.addWidget(self.export_button)
         self.vlayout.addWidget(self.reset_button)
         self.setLayout(self.vlayout)
-        self.setFixedWidth(320)
+        self.setFixedWidth(340)
         self.sd = [0 for i in range(0, self.number_pc)]
 
 

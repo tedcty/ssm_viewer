@@ -6,7 +6,7 @@ import time
 import numpy as np
 from PySide6.QtWidgets import (QMainWindow, QApplication, QMenuBar, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox)
 from PySide6.QtGui import QIcon, QColor
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, QEvent
 
 from ssm_gui.defaults.viewer import WorldView
 from ssm_gui.defaults.widgets import SSMInfoWidget, CameraWidget
@@ -377,6 +377,14 @@ class O3dHelperApp(QMainWindow):
         self.qw.resize_ev(self.size())
         print("size")
 
+    def event(self, e):
+        if e.type() == QEvent.Type.DevicePixelRatioChange:
+            print("Main window: DPI changed - scheduling delayed mask update")
+            self.qw.model_name_widget.clearMask()
+            from PySide6.QtCore import QTimer
+            QTimer.singleShot(200, self.qw.model_name_widget._delayed_mask_refresh)
+        return super().event(e)
+
 
     def dragEnterEvent(self, e):
         if e.mimeData().hasUrls:
@@ -414,6 +422,7 @@ class O3dHelperApp(QMainWindow):
 
 
 if __name__ == "__main__":
+    QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     print("SSM Viewer version {0} {1}".format(__version__, __dev_state__))
     print()
     print('Starting ...')

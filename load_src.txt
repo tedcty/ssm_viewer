@@ -1,0 +1,18 @@
+    @staticmethod
+    def load(mesh_filename, clean_mesh=True):
+        """
+        Load mesh as polydata
+        :param mesh_filename: filepath of the mesh
+        :param clean_mesh: remove unreferenced nodes
+        :return: vtk.vtkPolyData
+        """
+        if os.path.exists(mesh_filename):
+            mesh_type = VTKMeshUtl.get_type(mesh_filename)
+            poly = mesh_type.read(mesh_filename)
+            if clean_mesh and poly is not None:
+                return VTKMeshUtl.clean(poly)
+            else:
+                return poly
+        else:
+            print("File not found: {0} does not exist!".format(mesh_filename))
+            return None

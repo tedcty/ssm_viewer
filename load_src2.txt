@@ -1,0 +1,6 @@
+    @staticmethod
+    def clean(polydata):
+        clean_poly = vtk.vtkCleanPolyData()
+        clean_poly.SetInputData(polydata)
+        clean_poly.Update()
+        return clean_poly.GetOutput()
