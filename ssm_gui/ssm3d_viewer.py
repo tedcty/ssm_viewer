@@ -13,7 +13,7 @@ from ssm_gui.defaults.widgets import SSMInfoWidget, CameraWidget
 from ssm_gui.defaults.tools import BasicIO
 from ssm_gui.util.dialogs import NewSSM, Preference
 from ssm_gui.models.shape import ShapeModel
-from ssm_gui.__init__  import __version__, __dev_state__, __build_date__
+from ssm_gui.__init__  import __version__, __dev_state__, __build_date__, resource_path
 
 
 from ptb.util.io.helper import JSONSUtl
@@ -231,7 +231,7 @@ class MainMenuBar(QMenuBar):
         if default_menus:
             self.default_menus()
 
-        self.sty = BasicIO.read_as_block("./defaults/menu.qss")
+        self.sty = BasicIO.read_as_block(resource_path("defaults/menu.qss"))
 
     def set_view(self, view):
         self.view = view
@@ -247,38 +247,38 @@ class MainMenuBar(QMenuBar):
     def default_menus(self):
         action_file = self.addMenu("File")
         new_file = action_file.addAction("New")
-        new_file.setIcon(QIcon('./icons/add-document.png'))
+        new_file.setIcon(QIcon(resource_path('icons/add-document.png')))
         new_file.triggered.connect(self.config_me.new_project)
         self.open_file = action_file.addAction("Open")
-        self.open_file.setIcon(QIcon('./icons/folder-open.png'))
+        self.open_file.setIcon(QIcon(resource_path('icons/folder-open.png')))
         self.open_file.triggered.connect(self.config_me.load)
         self.save_action = action_file.addAction("Save")
-        self.save_action.setIcon(QIcon('./icons/diskdark.png'))
+        self.save_action.setIcon(QIcon(resource_path('icons/diskdark.png')))
         self.save_action.triggered.connect(self.config_me.save)
         action_file.addSeparator()
         quit_action = action_file.addAction("Quit")
-        quit_action.setIcon(QIcon('./icons/power.png'))
+        quit_action.setIcon(QIcon(resource_path('icons/power.png')))
         quit_action.triggered.connect(self.config_me.on_exit)
         action_edit = self.addMenu("Edit")
         self.preferences = action_edit.addAction("Preferences")
-        self.preferences.setIcon(QIcon('./icons/slider.png'))
+        self.preferences.setIcon(QIcon(resource_path('icons/slider.png')))
         self.preferences.triggered.connect(self.preference_dialog)
         action_view = self.addMenu("View")
         view2 = action_view.addAction("Toggle Origin")
         view2.triggered.connect(self.toggle_origin)
-        view2.setIcon(QIcon('./icons/model-cube-arrows.png'))
+        view2.setIcon(QIcon(resource_path('icons/model-cube-arrows.png')))
 
         view3 = action_view.addAction("Reset Zoom")
         view3.triggered.connect(self.reset_view)
-        view3.setIcon(QIcon('./icons/zoom_reset.png'))
+        view3.setIcon(QIcon(resource_path('icons/zoom_reset.png')))
 
         view4 = action_view.addAction("Reset Orientation")
         view4.triggered.connect(self.reset_view_orientation)
-        view4.setIcon(QIcon('./icons/refresh.png'))
+        view4.setIcon(QIcon(resource_path('icons/refresh.png')))
 
         action_help = self.addMenu("Help")
         about = action_help.addAction("About")
-        about.setIcon(QIcon('./icons/info.png'))
+        about.setIcon(QIcon(resource_path('icons/info.png')))
         about.triggered.connect(self.config_me.help)
 
     def run(self):
@@ -336,7 +336,7 @@ class O3dHelperApp(QMainWindow):
         self.left = int(np.round((size.width()-self.width)/2.0, 0))
         self.top = int(np.round((size.height()-self.height)/2.0, 0))
         self.setWindowTitle(self.title)
-        self.setWindowIcon(QIcon('./icons/vector-alt.png'))
+        self.setWindowIcon(QIcon(resource_path('icons/vector-alt.png')))
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         self.main_widget = MainWidget(self)
@@ -359,13 +359,12 @@ class O3dHelperApp(QMainWindow):
         self.main_widget.setObjectName('world_qw')
 
         self.setCentralWidget(self.main_widget)
-        self.setStyleSheet(BasicIO.read_as_block("./defaults/main_window.qss"))
-        q = Thread(target=self.start_world)
-        q.start()
+        self.setStyleSheet(BasicIO.read_as_block(resource_path("defaults/main_window.qss")))
+        from PySide6.QtCore import QTimer
+        QTimer.singleShot(500, self.start_world)
 
 
     def start_world(self):
-        time.sleep(0.5)
         print("Connect menubar to view")
         self.main_widget.menu_bar.set_view(self.qw)
         print("Reset Camera View")
@@ -428,8 +427,50 @@ if __name__ == "__main__":
     print('Starting ...')
 
     app = QApplication(sys.argv)
+
+    # Show splash screen immediately
+    from PySide6.QtWidgets import QSplashScreen, QProgressBar, QLabel
+    from PySide6.QtGui import QPixmap, QFont
+    splash_pix = QPixmap(resource_path('icons/splash.png'))
+    splash = QSplashScreen(splash_pix)
+
+    # Add version text
+    version_label = QLabel(f"v{__version__} {__dev_state__}", splash)
+    version_label.setStyleSheet("color: #a0a0a0; background-color: transparent;")
+    version_font = QFont()
+    version_font.setPointSize(10)
+    version_label.setFont(version_font)
+    version_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    version_label.setGeometry((splash_pix.width() - 200) // 2, splash_pix.height() - 80, 200, 20)
+
+    # Add a live loading bar under the text
+    progress_bar = QProgressBar(splash)
+    progress_bar.setRange(0, 100)
+    progress_bar.setTextVisible(False)
+    progress_bar.setStyleSheet("""
+        QProgressBar {
+            border: none;
+            background-color: transparent;
+        }
+        QProgressBar::chunk {
+            background-color: #dbdbd9;
+            border-radius: 2px;
+        }
+    """)
+    progress_bar.setGeometry((splash_pix.width() - 200) // 2, splash_pix.height() - 50, 200, 4)
+
+    splash.show()
+    app.processEvents()
+
+    # Simulate rapid loading progress for visual feedback
+    for i in range(1, 101, 3):
+        progress_bar.setValue(i)
+        app.processEvents()
+        time.sleep(0.01)
+
     current_screen = app.primaryScreen()
-    ex = O3dHelperApp(current_screen)
+    ex = O3dHelperApp(current_screen, splash=splash)
     ex.show()
+    splash.finish(ex)
     sys.exit(app.exec())
 

@@ -10,13 +10,14 @@ from ptb.util.io.helper import BasicIO
 
 from ssm_gui.models.shape import ShapeModel
 from ssm_gui.defaults.widgets import OpacitySlider
+from ssm_gui.__init__ import resource_path
 
 
 class CustomCheckbox(QCheckBox):
     def __init__(self, text="", parent=None):
         super().__init__(text, parent)
-        self.checked_pixmap = QPixmap("./icons/checkbox1.png")  # Replace with your checked image path
-        self.unchecked_pixmap = QPixmap("./icons/square1.png")  # Replace with your unchecked image path
+        self.checked_pixmap = QPixmap(resource_path("icons/checkbox1.png"))  # Replace with your checked image path
+        self.unchecked_pixmap = QPixmap(resource_path("icons/square1.png"))  # Replace with your unchecked image path
         self.indicator_size = 15  # Adjust as needed
 
     def paintEvent(self, event):
@@ -115,7 +116,7 @@ class Preference(QWidget):
         self.setFixedWidth(450)
         self.setFixedHeight(500)
         self.setWindowTitle("Preferences")
-        self.setStyleSheet(BasicIO.read_as_block("./defaults/dialog.qss"))
+        self.setStyleSheet(BasicIO.read_as_block(resource_path("defaults/dialog.qss")))
         self.mean_color = [242, 238, 220]
 
 
@@ -128,7 +129,7 @@ class Preference(QWidget):
         self.mesh_name.setText(self.ssm.model.model_name)
         self.color_button = QPushButton('', self)
         self.color_button.setStyleSheet(Preference.button_background(self.mean_color))
-        self.color_button.setIcon(QIcon("icons/palette.png"))
+        self.color_button.setIcon(QIcon(resource_path("icons/palette.png")))
         self.color_button.clicked.connect(self.choose_color)
 
         line1 = QWidget()
@@ -160,7 +161,7 @@ class Preference(QWidget):
         self.opacity_current = OpacitySlider(self, 'Opacity Current Mesh', self.update_current_mesh_opacity)
         self.opacity_current.set_initial_value(1)
         self.color_button_current = QPushButton('', self)
-        self.color_button_current.setIcon(QIcon("icons/palette.png"))
+        self.color_button_current.setIcon(QIcon(resource_path("icons/palette.png")))
         self.color_button_current.setStyleSheet(Preference.button_background(self.current_colour))
         self.color_button_current.clicked.connect(self.choose_color_current)
 
@@ -318,7 +319,7 @@ class NewSSM(QWidget):
         layout = QVBoxLayout()
         self.setFixedWidth(500)
         self.setWindowTitle("New SSM Config")
-        self.setStyleSheet(BasicIO.read_as_block("./defaults/dialog.qss"))
+        self.setStyleSheet(BasicIO.read_as_block(resource_path("defaults/dialog.qss")))
 
         self.pc_widget = QWidget()
         pc_lay = QHBoxLayout()
@@ -326,7 +327,7 @@ class NewSSM(QWidget):
         self.pc_path = QLineEdit("PC File Path")
         self.pc_path.setObjectName('text_box')
         self.pc_button = QPushButton('', self)
-        self.pc_button.setIcon(QIcon("icons/add-document.png"))
+        self.pc_button.setIcon(QIcon(resource_path("icons/add-document.png")))
         self.pc_button.clicked.connect(self.open_file_pc)
 
         self.mesh = QWidget()
@@ -335,7 +336,7 @@ class NewSSM(QWidget):
         self.mean_mesh = QLineEdit("Mean Mesh Path")
         self.mean_mesh.setObjectName('text_box')
         self.mean_mesh_button = QPushButton('', self)
-        self.mean_mesh_button.setIcon(QIcon("icons/add-document.png"))
+        self.mean_mesh_button.setIcon(QIcon(resource_path("icons/add-document.png")))
         self.mean_mesh_button.clicked.connect(self.open_file_mesh)
 
         pc_lay.addWidget(self.pc_file)

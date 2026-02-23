@@ -10,6 +10,7 @@ from ptb.util.io.opendialog import OpenFiles
 from ptb.util.lang import CommonSymbols
 from ptb.util.io.helper import BasicIO
 from ptb.util.data import VTKMeshUtl
+from ssm_gui.__init__ import resource_path
 
 
 class InfoWidget(QWidget):
@@ -105,13 +106,13 @@ class MeshInfoWidget(QWidget):
         self.text_box.resize(50, 30)
         self.text_box.setMinimumHeight(30)
         self.button = QPushButton('', self)
-        self.button.setIcon(QIcon("icons/add-document.png"))
+        self.button.setIcon(QIcon(resource_path("icons/add-document.png")))
 
         self.delete_button = QPushButton('', self)
-        self.delete_button.setIcon(QIcon("icons/trash.png"))
+        self.delete_button.setIcon(QIcon(resource_path("icons/trash.png")))
 
         self.setting_button = QPushButton('', self)
-        self.setting_button.setIcon(QIcon("icons/slider.png"))
+        self.setting_button.setIcon(QIcon(resource_path("icons/slider.png")))
 
         self.checker = QCheckBox()
         self.checker.setObjectName("check_box")
@@ -204,7 +205,7 @@ class MeshInfoWidget(QWidget):
         self.root.world.remove_actor(self.actor_name)
 
     def on_click(self):
-        self.button.setIcon(QIcon("icons/add-document.png"))
+        self.button.setIcon(QIcon(resource_path("icons/add-document.png")))
         dialog = OpenFiles()
         file_names = dialog.get_file('Mesh (*.stl *.ply);; All File (*.*)')
         if file_names is not None:
@@ -212,7 +213,7 @@ class MeshInfoWidget(QWidget):
             print("open", file_names)
             if len(file_names[0]) == 0:
                 return
-            self.button.setIcon(QIcon("icons/add-document.png"))
+            self.button.setIcon(QIcon(resource_path("icons/add-document.png")))
             if len(file_names[0]) > 0:
                 self.checker.setChecked(True)
             self.text_box.setText(file_names[0])
@@ -312,7 +313,7 @@ class SSMInfoWidget(QWidget):
 
     def __init__(self, parent, ssm):
         super().__init__(parent)
-        self.setStyleSheet(BasicIO.read_as_block("./defaults/ssminfo.qss"))
+        self.setStyleSheet(BasicIO.read_as_block(resource_path("defaults/ssminfo.qss")))
         self.root = parent
         self.model = ssm
         self.number_pc = 9
@@ -503,12 +504,12 @@ class CameraWidget(QWidget):
     def __init__(self, parent, view):
         super().__init__(parent)
         self.view = view
-        self.setStyleSheet(BasicIO.read_as_block("./defaults/world_control.qss"))
+        self.setStyleSheet(BasicIO.read_as_block(resource_path("defaults/world_control.qss")))
         self.root = parent
         self.vlayout = QVBoxLayout()
         labe = QWidget()
         hv = QHBoxLayout()
-        pixmap = QPixmap('./icons/globe-alt.png')
+        pixmap = QPixmap(resource_path('icons/globe-alt.png'))
         scaled_pixmap = pixmap.scaled(
             35, 35, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation
         )
@@ -539,7 +540,7 @@ class CameraWidget(QWidget):
         self.z_neg.clicked.connect(self.on_z_neg_clicked)
 
         self.snap_button = QPushButton('', self)
-        self.snap_button.setIcon(QIcon("./icons/camera.png"))
+        self.snap_button.setIcon(QIcon(resource_path("icons/camera.png")))
         self.snap_button.setToolTip("Take a snapshot of the current view.")
         self.snap_button.clicked.connect(self.snapshot)
 

@@ -14,6 +14,7 @@ import numpy as np
 import copy
 
 from ssm_gui.defaults.widgets import MeshInfoWidget, InfoWidget, AngleInfoWidget
+from ssm_gui.__init__ import resource_path
 
 
 class WorldPolyDataHelper:
@@ -825,7 +826,7 @@ class WorldView(QWidget):
 
     def __init__(self, parent, main_win):
         super().__init__()
-        self.sheet = BasicIO.read_as_block("./defaults/drop_button.qss")
+        self.sheet = BasicIO.read_as_block(resource_path("defaults/drop_button.qss"))
         self.setStyleSheet(self.sheet)
         self.app_win = main_win
         self.world = World(parent, main_win)
@@ -1077,7 +1078,7 @@ class WorldMenuWidgetAngles(QWidget):
 
         vl.addStretch(5)
         self.setLayout(vl)
-        self.sheet = BasicIO.read_as_block("./defaults/drop_menu.qss")
+        self.sheet = BasicIO.read_as_block(resource_path("defaults/drop_menu.qss"))
         self.setStyleSheet(self.sheet)
 
         # Create a QPixmap with the same size as the window, filled with a transparent color
@@ -1135,7 +1136,7 @@ class WorldMenuWidgetOptions(QWidget):
 
         self.vl.addStretch(5)
         self.setLayout(self.vl)
-        self.sheet = BasicIO.read_as_block("./defaults/drop_menu.qss")
+        self.sheet = BasicIO.read_as_block(resource_path("defaults/drop_menu.qss"))
         self.setStyleSheet(self.sheet)
 
         # Create a QPixmap with the same size as the window, filled with a transparent color
@@ -1207,7 +1208,7 @@ class WorldMenuWidget(QWidget):
 
         self.vl.addStretch(5)
         self.setLayout(self.vl)
-        self.sheet = BasicIO.read_as_block("./defaults/drop_menu.qss")
+        self.sheet = BasicIO.read_as_block(resource_path("defaults/drop_menu.qss"))
         self.setStyleSheet(self.sheet)
         self.mesh_button.clicked.connect(self.mesh_load_trigger)
 
