@@ -218,6 +218,40 @@ class World:
         self.vtk_widget.update()
         return actor
 
+    def add_node_markers(self, points, actor_name='node_markers', radius=None, color=(0.85, 0.1, 0.1)):
+        self.remove_actor(actor_name)
+        if points is None or len(points) == 0:
+            self.vtk_widget.update()
+            return None
+
+        if radius is None:
+            pts = np.asarray(points)
+            diag = np.linalg.norm(pts.max(axis=0) - pts.min(axis=0))
+            radius = max(diag * 0.02, 0.5)
+
+        vtk_points = vtk.vtkPoints()
+        for p in points:
+            vtk_points.InsertNextPoint(float(p[0]), float(p[1]), float(p[2]))
+        poly = vtk.vtkPolyData()
+        poly.SetPoints(vtk_points)
+
+        sphere = vtk.vtkSphereSource()
+        sphere.SetRadius(radius)
+        sphere.SetPhiResolution(12)
+        sphere.SetThetaResolution(12)
+
+        glyph = vtk.vtkGlyph3D()
+        glyph.SetSourceConnection(sphere.GetOutputPort())
+        glyph.SetInputData(poly)
+        glyph.ScalingOff()
+
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInputConnection(glyph.GetOutputPort())
+        actor = vtk.vtkActor()
+        actor.SetMapper(mapper)
+        actor.GetProperty().SetColor(*color)
+        return self.add_actor(actor_name=actor_name, actor=actor)
+
     def start_world(self):
         self.ren.AddActor(self.txt)
         self.ren.ResetCamera()
