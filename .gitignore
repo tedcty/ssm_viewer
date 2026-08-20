@@ -8,6 +8,7 @@ ssm_gui/defaults/__pycache__/__init__.cpython-312.pyc
 ssm_gui/defaults/__pycache__/viewer.cpython-312.pyc
 ssm_gui/scripts/resources/wheels/ptb/latest.txt
 ssm_gui/__pycache__/__init__.cpython-312.pyc
+ssm_gui/__pycache__/ssm3d_viewer.cpython-312.pyc
 ssm_gui/defaults/__pycache__/tools.cpython-312.pyc
 ssm_gui/defaults/__pycache__/widgets.cpython-312.pyc
 .idea/workspace.xml
