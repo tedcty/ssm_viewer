@@ -16,6 +16,8 @@ ssm_gui/models/__pycache__/__init__.cpython-312.pyc
 ssm_gui/models/__pycache__/shape.cpython-312.pyc
 ssm_gui/util/__pycache__/__init__.cpython-312.pyc
 ssm_gui/util/__pycache__/dialogs.cpython-312.pyc
+ssm_gui/util/__pycache__/nodes.cpython-312.pyc
+ssm_gui/util/__pycache__/update_checker.cpython-312.pyc
 ssm_gui/sandbox.py
 ssm_gui/sandbox2.py
 ssm_gui/example/humerus(scaled).stl
